@@ -13,7 +13,10 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "lint": "eslint . --ext ts,tsx,js,jsx",
+    "lint:fix": "eslint . --ext ts,tsx,js,jsx --fix"
   },
   "dependencies": {
     "@mdx-js/react": "^2.3.0",
@@ -24,6 +27,7 @@
     "gatsby-plugin-manifest": "^5.12.0",
     "gatsby-plugin-mdx": "^5.12.0",
     "gatsby-plugin-postcss": "^6.12.0",
+    "gatsby-plugin-prettier-build": "^0.4.4",
     "gatsby-plugin-sharp": "^5.12.0",
     "gatsby-plugin-sitemap": "^6.12.0",
     "gatsby-source-filesystem": "^5.12.0",
@@ -37,6 +41,11 @@
     "@types/node": "^20.3.3",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^3.0.3",
     "typescript": "^5.1.6"
   }
 }
