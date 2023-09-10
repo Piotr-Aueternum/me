@@ -63,7 +63,8 @@ const useParticles = (boundaries: Vector2) => {
 };
 
 export const Dust = ({ className }: { className: string }) => {
-  const canvasWidth = window.outerWidth;
+  const isSSR = typeof window === 'undefined';
+  const canvasWidth = isSSR ? 0 : window.outerWidth;
   const canvasHeight = canvasWidth / 3;
   const boundaries = new Vector2(canvasWidth, canvasHeight);
   const { setCanvas } = useParticles(boundaries);
