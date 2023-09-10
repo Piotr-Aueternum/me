@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { HeadFC, PageProps } from 'gatsby';
-import { Intro } from './modules/Intro';
+import { Intro } from '../modules';
 
 const pageStyles = {
   color: '#232129',
