@@ -5,9 +5,9 @@ import { Dust } from './components/Dust';
 export const Intro = () => {
   return (
     <>
-      <div className="w-screen md:aspect-[3/1] relative flex justify-center">
+      <div className="w-full md:aspect-[3/1] relative flex justify-center o overflow-hidden">
         <StaticImage
-          className="w-screen object-fill md:aspect-[3/1] md:absolute z-10"
+          className="w-full object-fill md:aspect-[3/1] md:absolute left-0 top-0 z-10"
           src="../../images/intro.jpg"
           alt="Background image presenting cave"
         />
@@ -18,7 +18,7 @@ export const Intro = () => {
             Software Engineer
           </span>
         </h1>
-        <Dust className="w-screen md:aspect-[3/1] absolute z-20" />
+        <Dust className="absolute left-0 top-0 z-20 md:aspect-[3/1] " />
       </div>
     </>
   );
