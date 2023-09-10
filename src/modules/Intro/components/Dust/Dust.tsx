@@ -70,7 +70,7 @@ export const Dust = ({ className }: { className: string }) => {
   const { setCanvas } = useParticles(boundaries);
   return (
     <canvas
-      className={`${className} `}
+      className={className}
       width={canvasWidth}
       height={canvasHeight}
       ref={setCanvas}
