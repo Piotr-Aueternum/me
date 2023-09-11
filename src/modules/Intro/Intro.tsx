@@ -4,10 +4,11 @@ import { Dust } from './components/Dust';
 
 export const Intro = () => {
   return (
-    <div className="w-full md:aspect-[3/1] relative flex justify-center o overflow-hidden">
+    <div className="w-full aspect-[1/1] md:aspect-[3/1] relative flex justify-center o overflow-hidden">
       <StaticImage
-        className="w-full object-fill md:aspect-[3/1] md:absolute left-0 top-0 z-10"
-        src="../../images/intro.jpg"
+        className="w-full h-full object-fill aspect-[1/1] md:aspect-[3/1] absolute left-0 top-0 z-10 object-right"
+        imgClassName="object-right"
+        src="../../images/intro.webp"
         alt="Background image presenting cave"
       />
       <h1 className="absolute z-30 top-3/4 bottom-1/4 md:bottom-auto container mx-auto">
@@ -17,7 +18,7 @@ export const Intro = () => {
           Software Engineer
         </span>
       </h1>
-      <Dust className="absolute left-0 top-0 z-20 md:aspect-[3/1] " />
+      <Dust className="absolute left-0 top-0 z-20 aspect-[1/1] md:aspect-[3/1] " />
     </div>
   );
 };

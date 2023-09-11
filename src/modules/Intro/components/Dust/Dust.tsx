@@ -13,13 +13,16 @@ import {
   RANGE_SPEED,
 } from './const';
 import { CircleRenderer, Renderer } from './renderers';
-import { Vector2, getRandomPosition } from './utils';
+import { Vector2, calculateCanvasRatio, getRandomPosition } from './utils';
 import { useRenderEngine } from './useRenderEngine';
 import { State } from './state';
 
-const useParticles = (boundaries: Vector2) => {
+const useParticles = () => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const context = canvas?.getContext('2d')!;
+
+  const { width, height } = calculateCanvasRatio(canvas);
+  const boundaries = new Vector2(width, height);
 
   const generateCircles = (count: number, distance: number = 1) => {
     return [...new Array(count)].map(() => {
@@ -33,18 +36,21 @@ const useParticles = (boundaries: Vector2) => {
       );
     });
   };
-  const [state] = useState<State>(
-    new State(
-      [
-        ...generateCircles(5, 2),
-        ...generateCircles(15, 1),
-        ...generateCircles(40, 0.5),
-      ],
-      boundaries,
-      50,
-      CIRCLE_RENDER_RULES
-    )
-  );
+  const [state, setState] = useState<State | null>(null);
+  if (canvas && state === null) {
+    setState(
+      new State(
+        [
+          ...generateCircles(5, 2),
+          ...generateCircles(15, 1),
+          ...generateCircles(40, 0.5),
+        ],
+        boundaries,
+        50,
+        CIRCLE_RENDER_RULES
+      )
+    );
+  }
 
   const renderers: Renderer[] = [new CircleRenderer()];
 
@@ -59,20 +65,17 @@ const useParticles = (boundaries: Vector2) => {
     context,
     state,
   });
-  return { setCanvas };
+  return { width: width, height: height, setCanvas };
 };
 
 export const Dust = ({ className }: { className: string }) => {
-  const isSSR = typeof window === 'undefined';
-  const canvasWidth = isSSR ? 0 : window.outerWidth;
-  const canvasHeight = canvasWidth / 3;
-  const boundaries = new Vector2(canvasWidth, canvasHeight);
-  const { setCanvas } = useParticles(boundaries);
+  const { width, height, setCanvas } = useParticles();
+
   return (
     <canvas
       className={className}
-      width={canvasWidth}
-      height={canvasHeight}
+      width={width}
+      height={height}
       ref={setCanvas}
     />
   );

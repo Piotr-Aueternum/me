@@ -65,3 +65,19 @@ export class FadingCircle {
     public color: ColorRGBA
   ) {}
 }
+
+export const calculateCanvasRatio = (canvas: HTMLCanvasElement | null) => {
+  const isSSR = typeof window === 'undefined';
+  const width = isSSR ? 0 : window.innerWidth;
+  const [h, w] = canvas
+    ? window
+        .getComputedStyle(canvas)
+        .getPropertyValue('aspect-ratio')
+        .replace('auto', '')
+        .trim()
+        .split(' / ')
+        .map(Number)
+    : [1, 1];
+  const height = (w * width) / h;
+  return { width, height };
+};

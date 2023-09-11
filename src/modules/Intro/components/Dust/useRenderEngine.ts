@@ -11,12 +11,12 @@ export const useRenderEngine = ({
 }: {
   renderers: Renderer[];
   systems: System[];
-  state: State;
+  state: State | null;
   context: CanvasRenderingContext2D;
 }) => {
   useEffect(() => {
     const update = (deltaTime: number) => {
-      if (context) {
+      if (context && state) {
         context.clearRect(0, 0, state.boundaries.x, state.boundaries.y);
         systems.forEach((system) => system.Update(deltaTime, state));
         context.save();
