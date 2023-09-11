@@ -3,25 +3,25 @@ import { State } from './state';
 import { Vector2 } from './utils';
 
 export interface System {
-  Update(deltaTime: number, state: State): void;
+  Update(state: State): void;
 }
 
 export class EntitiesMovementSystem implements System {
-  public Update(deltaTime: number, state: State) {
+  public Update(state: State) {
     const MoveEntity = (entity: Entity) => {
-      entity.position = entity.position.add(
-        entity.direction.multiplyBy(entity.speed * deltaTime)
-      );
+      const rhythm = (100 - entity.rhythm(state.time / 50) * 10 * 3) / 100;
+      const speed = entity.speed * state.deltaTime * rhythm;
+      entity.position = entity.position.add(entity.direction.multiplyBy(speed));
     };
     state.entities.forEach(MoveEntity);
   }
 }
 export class EntitiesBoundariesSystem implements System {
-  public Update(deltaTime: number, state: State) {
+  public Update(state: State) {
     const RedirectEntity = (entity: Entity) => {
       let y = entity.direction.y;
       let x = entity.direction.x;
-      const speed = entity.speed * deltaTime;
+      const speed = entity.speed * state.deltaTime;
       if (
         entity.position.y + y * speed > state.boundaries.y + state.border ||
         entity.position.y + y * speed < 0 - state.border

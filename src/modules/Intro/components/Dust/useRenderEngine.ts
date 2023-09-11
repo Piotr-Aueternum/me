@@ -15,10 +15,10 @@ export const useRenderEngine = ({
   context: CanvasRenderingContext2D;
 }) => {
   useEffect(() => {
-    const update = (deltaTime: number) => {
+    const update = () => {
       if (context && state) {
         context.clearRect(0, 0, state.boundaries.x, state.boundaries.y);
-        systems.forEach((system) => system.Update(deltaTime, state));
+        systems.forEach((system) => system.Update(state));
         context.save();
         renderers.forEach((renderer) => renderer.Render(context, state));
         context.restore();
@@ -32,7 +32,7 @@ export const useRenderEngine = ({
 
     let deltaTime = 0;
     let lastTimestamp = 0;
-
+    let time = 0;
     const loop = (timestamp: number) => {
       animationFrameId = window.requestAnimationFrame(loop);
       deltaTime = (timestamp - lastTimestamp) / desiredFrameRate;
@@ -40,7 +40,12 @@ export const useRenderEngine = ({
       if (deltaTime > 3) {
         deltaTime = 3;
       }
-      update(deltaTime);
+      time += deltaTime;
+      if (state) {
+        state.deltaTime = deltaTime;
+        state.time = time;
+      }
+      update();
     };
     animationFrameId = window.requestAnimationFrame(loop);
     return () => {
