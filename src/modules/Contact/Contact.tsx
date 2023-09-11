@@ -1,7 +1,7 @@
 import React from 'react';
 export const Contact = () => {
   return (
-    <section className="py-60">
+    <section className="py-24 md:py-60">
       <h2 className="text-3xl font-serif">Contact</h2>
       <ul className="mt-4">
         <li>

@@ -6,7 +6,7 @@ const IndexPage: React.FC<PageProps> = () => {
   return (
     <>
       <Intro />
-      <main className="container mx-auto">
+      <main className="container mx-auto px-6 md:px-0">
         <Contact />
       </main>
     </>
