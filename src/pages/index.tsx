@@ -16,5 +16,8 @@ const IndexPage: React.FC<PageProps> = () => {
 export default IndexPage;
 
 export const Head: HeadFC = () => (
-  <title>Piotr Sochacz - Software Engineer</title>
+  <>
+    <meta name="viewport" content="initial-scale=1, viewport-fit=cover"></meta>
+    <title>Piotr Sochacz - Software Engineer</title>
+  </>
 );
