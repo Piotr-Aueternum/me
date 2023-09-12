@@ -77,7 +77,7 @@ export const calculateCanvasRatio = (canvas: HTMLCanvasElement | null) => {
         .trim()
         .split(' / ')
         .map(Number)
-    : [1, 1];
+    : [window.innerWidth, window.innerHeight];
   const height = (w * width) / h;
   return { width, height };
 };
