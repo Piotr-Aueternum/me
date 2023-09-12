@@ -6,14 +6,14 @@ import { SocialMedia } from '../components/SocialMedia';
 
 const IndexPage: React.FC<PageProps> = () => {
   return (
-    <div className="w-full h-screen md:aspect-[3/1] relative flex justify-center o overflow-hidden">
+    <div className="w-full h-screen relative flex justify-center o overflow-hidden">
       <StaticImage
-        className="w-full h-screen object-cover object-[80%] md:object-right md:aspect-[3/1] absolute left-0 top-0 z-10 "
+        className="w-full h-screen object-cover object-[80%] md:object-right absolute left-0 top-0 z-10 "
         imgClassName="object-[80%] md:object-right"
         src="../images/intro.webp"
         alt="Background image presenting cave"
       />
-      <div className="absolute z-30 left-6 md:left-auto md:top-3/4 bottom-8 md:bottom-auto container mx-auto">
+      <div className="absolute z-30 left-6 md:left-auto bottom-8 md:bottom-28 lg:bottom-48 container mx-auto">
         <h1 className="">
           <span className="text-slate-100 text-5xl">Piotr Sochacz</span>
           <br />
@@ -23,7 +23,7 @@ const IndexPage: React.FC<PageProps> = () => {
         </h1>
         <SocialMedia />
       </div>
-      <Dust className="absolute left-0 top-0 z-20 md:aspect-[3/1] " />
+      <Dust className="absolute left-0 top-0 z-20" />
     </div>
   );
 };
