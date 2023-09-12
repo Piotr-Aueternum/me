@@ -11,7 +11,14 @@ module.exports = {
       sans: ['Dosis', ...defaultTheme.fontFamily.sans],
       serif: ['Hepta Slab', ...defaultTheme.fontFamily.serif],
     },
-    extend: {},
+    extend: {
+      height: {
+        screen: ['100vh', '100dvh'],
+      },
+      width: {
+        screen: ['100vw', '100dvw'],
+      },
+    },
   },
   plugins: [],
 };
