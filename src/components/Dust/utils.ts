@@ -31,8 +31,11 @@ export class Vector2 {
   }
 }
 
-export const generateEntityPairs = (entities: Entity[], threshold: number) => {
-  const pairs: Entity[][] = [];
+export const generateEntityPairs = (
+  entities: Entity[],
+  threshold: number,
+): [Entity, Entity][] => {
+  const pairs: [Entity, Entity][] = [];
   for (let i = 0; i < entities.length - 1; i++) {
     for (let j = i + 1; j < entities.length; j++) {
       const start = entities[i];
