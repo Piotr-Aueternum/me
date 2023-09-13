@@ -10,21 +10,20 @@ import {
   System,
 } from "./systems";
 import { useRenderEngine } from "./useRenderEngine";
-import { calculateCanvasRatio, generateCircles, Vector2 } from "./utils";
+import { generateCircles, useWindowSize, Vector2 } from "./utils";
 
 const useParticles = () => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const context = canvas?.getContext("2d")!;
-
-  const { width, height } = calculateCanvasRatio();
+  const { width, height } = useWindowSize();
   const [boundaries, setBounderies] = useState<Vector2>(
     new Vector2(width, height),
   );
   const [state, setState] = useState<State | null>(null);
   if (typeof window !== "undefined" && canvas && state === null) {
-    const { width, height } = calculateCanvasRatio();
     const newBoundaries = new Vector2(width, height);
     setBounderies(newBoundaries);
+    console.log({ width, height });
     setState(
       new State(
         [
@@ -44,7 +43,6 @@ const useParticles = () => {
     }
     function boundariesSetter() {
       if (state) {
-        const { width, height } = calculateCanvasRatio();
         const newBoundaries = new Vector2(width, height);
         setBounderies(newBoundaries);
         state.boundaries = newBoundaries;
@@ -53,7 +51,7 @@ const useParticles = () => {
     window.addEventListener("resize", boundariesSetter);
     boundariesSetter();
     return () => window.removeEventListener("resize", boundariesSetter);
-  }, [state]);
+  }, [state, height, width]);
 
   const renderers: Renderer[] = [new CircleRenderer(CIRCLE_RENDER_RULES)];
 
