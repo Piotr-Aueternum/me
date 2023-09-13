@@ -69,21 +69,10 @@ export class FadingCircle {
   ) {}
 }
 
-export const calculateCanvasRatio = (canvas: HTMLCanvasElement | null) => {
+export const calculateCanvasRatio = () => {
   const isSSR = typeof window === "undefined";
   if (isSSR) {
     return { width: 100, height: 100 };
   }
-  const width = window.innerWidth;
-  const [h, w] = canvas
-    ? window
-        .getComputedStyle(canvas)
-        .getPropertyValue("aspect-ratio")
-        .replace("auto", "")
-        .trim()
-        .split(" / ")
-        .map(Number)
-    : [width, window.innerHeight];
-  const height = (w * width) / h;
-  return { width, height };
+  return { width: window.innerWidth, height: window.innerHeight };
 };

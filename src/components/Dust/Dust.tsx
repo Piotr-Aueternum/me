@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   CIRCLE_RENDER_RULES,
@@ -22,8 +22,10 @@ const useParticles = () => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const context = canvas?.getContext("2d")!;
 
-  const { width, height } = calculateCanvasRatio(canvas);
-  const boundaries = new Vector2(width, height);
+  const { width, height } = calculateCanvasRatio();
+  const [boundaries, setBounderies] = useState<Vector2>(
+    new Vector2(width, height),
+  );
 
   const generateCircles = (count: number, distance: number = 1) => {
     return [...new Array(count)].map(() => {
@@ -64,6 +66,22 @@ const useParticles = () => {
     );
   }
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    function autoResize() {
+      if (state) {
+        const { width, height } = calculateCanvasRatio();
+        const newBoundaries = new Vector2(width, height);
+        setBounderies(newBoundaries);
+        state.boundaries = newBoundaries;
+      }
+    }
+    window.addEventListener("resize", autoResize);
+    return () => window.removeEventListener("resize", autoResize);
+  }, [state]);
+
   const renderers: Renderer[] = [new CircleRenderer()];
 
   const systems: System[] = [
@@ -77,12 +95,12 @@ const useParticles = () => {
     context,
     state,
   });
-  return { width: width, height: height, setCanvas };
+  return { width: boundaries.x, height: boundaries.y, setCanvas };
 };
 
 export const Dust = ({ className }: { className: string }) => {
   const { width, height, setCanvas } = useParticles();
-
+  console.log(width, height);
   return (
     <canvas
       className={className}

@@ -13,7 +13,7 @@ const IndexPage: React.FC<PageProps> = () => {
         src="../images/intro.webp"
         alt="Background image presenting cave"
       />
-      <div className="container absolute bottom-8 left-6 z-30 mx-auto md:left-auto landscape:bottom-8 landscape:md:bottom-28 landscape:lg:bottom-48">
+      <div className="container absolute bottom-8 left-6 z-30 mx-auto md:left-auto landscape:bottom-8 landscape:lg:bottom-28 ">
         <h1 className="">
           <span className="text-5xl text-slate-100">Piotr Sochacz</span>
           <br />
