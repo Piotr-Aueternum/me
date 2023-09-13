@@ -72,7 +72,7 @@ const useParticles = () => {
     if (typeof window === "undefined") {
       return;
     }
-    function autoResize() {
+    function boundariesSetter() {
       if (state) {
         const { width, height } = calculateCanvasRatio();
         const newBoundaries = new Vector2(width, height);
@@ -80,8 +80,9 @@ const useParticles = () => {
         state.boundaries = newBoundaries;
       }
     }
-    window.addEventListener("resize", autoResize);
-    return () => window.removeEventListener("resize", autoResize);
+    window.addEventListener("resize", boundariesSetter);
+    boundariesSetter();
+    return () => window.removeEventListener("resize", boundariesSetter);
   }, [state]);
 
   const renderers: Renderer[] = [new CircleRenderer()];
