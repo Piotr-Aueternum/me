@@ -1,0 +1,63 @@
+---
+interface Props {
+  class: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<canvas id="dust" class={className}></canvas>
+<script>
+  import { CIRCLE_RENDER_RULES } from "./const";
+  import { CircleRenderer } from "./renderers";
+  import type { Renderer } from "./renderers";
+  import { State } from "./state";
+  import {
+    EntitiesBoundariesSystem,
+    EntitiesMovementSystem,
+    EntitiesRespawnSystem,
+  } from "./systems";
+  import type { System } from "./systems";
+  import { engine } from "./engine";
+  import { generateCircles, Vector2 } from "./utils";
+
+  const canvas = document.getElementById("dust") as HTMLCanvasElement;
+  const context = canvas.getContext("2d")!;
+  const boundaries = new Vector2(window.innerWidth, window.innerHeight);
+  const updateCanvasSize = (size: Vector2) => {
+    canvas.width = size.x;
+    canvas.height = size.y;
+  };
+  updateCanvasSize(boundaries);
+  const state = new State(
+    [
+      ...generateCircles(5, boundaries, 2),
+      ...generateCircles(15, boundaries, 1),
+      ...generateCircles(40, boundaries, 0.5),
+    ],
+    boundaries,
+    50,
+  );
+
+  function handleResize() {
+    const newBoundaries = new Vector2(window.innerWidth, window.innerHeight);
+    updateCanvasSize(newBoundaries);
+    state.boundaries = newBoundaries;
+  }
+  window.addEventListener("resize", handleResize);
+
+  const renderers: Renderer[] = [new CircleRenderer(CIRCLE_RENDER_RULES)];
+
+  const systems: System[] = [
+    new EntitiesMovementSystem(),
+    new EntitiesBoundariesSystem(),
+    new EntitiesRespawnSystem(),
+  ];
+
+  engine({
+    renderers,
+    systems,
+    context,
+    state,
+  });
+</script>

@@ -1,10 +1,19 @@
+/** @type {import("prettier").Config} */
 module.exports = {
   tabs: 2,
   useTabs: false,
   printWidth: 80,
   plugins: [
-    "prettier-plugin-tailwindcss",
-    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-astro",
+    // "@ianvs/prettier-plugin-sort-imports",
+  ],
+  overrides: [
+    {
+      files: '*.astro',
+      options: {
+        parser: 'astro',
+      },
+    },
   ],
   importOrder: ["^@components/(.*)$", "", "^./(.*)$", "^../(.*)$"],
   importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],

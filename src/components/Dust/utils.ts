@@ -1,5 +1,3 @@
-import React from "react";
-
 import {
   MIN_RADIUS,
   MIN_SPEED,
@@ -45,11 +43,13 @@ export const generateEntityPairs = (entities: Entity[], threshold: number) => {
     for (let j = i + 1; j < entities.length; j++) {
       const start = entities[i];
       const destination = entities[j];
-      const distance = Math.hypot(
-        destination.position.x - start.position.x,
-        destination.position.y - start.position.y,
-      );
-      if (distance < threshold) pairs.push([start, destination]);
+      if (start && destination) {
+        const distance = Math.hypot(
+          destination.position.x - start.position.x,
+          destination.position.y - start.position.y,
+        );
+        if (distance < threshold) pairs.push([start, destination]);
+      }
     }
   }
   return pairs;
@@ -105,22 +105,3 @@ export const generateCircles = (
     );
   });
 };
-
-export function useWindowSize() {
-  const [windowSize, setWindowSize] = React.useState({
-    width: 1200,
-    height: 800,
-  });
-
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    function changeWindowSize() {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    }
-    window.addEventListener("resize", changeWindowSize);
-    changeWindowSize();
-    return () => window.removeEventListener("resize", changeWindowSize);
-  }, []);
-
-  return windowSize;
-}
