@@ -1,11 +1,12 @@
 import { Circle, Entity } from "./entities";
 import { State } from "./state";
-import { generateEntityPairs, Vector2 } from "./utils";
+import { FadingCircle, generateEntityPairs, Vector2 } from "./utils";
 
 export interface Renderer {
   Render(context: CanvasRenderingContext2D, state: State): void;
 }
 export class CircleRenderer implements Renderer {
+  constructor(public circleRules: FadingCircle[]) {}
   Render(context: CanvasRenderingContext2D, state: State) {
     const RenderCircle = (entity: Entity) => {
       if (!(entity instanceof Circle)) {
@@ -20,7 +21,7 @@ export class CircleRenderer implements Renderer {
         circle.position.y,
         circle.radius,
       );
-      const sortedCircleRenderRules = state.circleRules.toSorted(
+      const sortedCircleRenderRules = this.circleRules.toSorted(
         (a, b) => a.sizeFadingStart - b.sizeFadingStart,
       );
       for (const fadingCircle of sortedCircleRenderRules) {

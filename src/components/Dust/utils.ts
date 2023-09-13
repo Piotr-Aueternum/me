@@ -1,4 +1,11 @@
-import { Entity } from "./entities";
+import {
+  MIN_RADIUS,
+  MIN_SPEED,
+  PADDING_SPAWN,
+  RADIUS_RANGE,
+  RANGE_SPEED,
+} from "./const";
+import { Circle, Entity } from "./entities";
 
 export const getRandomPosition = (boundaries: Vector2, padding: number = 0) =>
   new Vector2(
@@ -75,4 +82,32 @@ export const calculateCanvasRatio = () => {
     return { width: 100, height: 100 };
   }
   return { width: window.innerWidth, height: window.innerHeight };
+};
+
+export const generateCircles = (
+  count: number,
+  boundaries: Vector2,
+  distance: number = 1,
+) => {
+  return [...new Array(count)].map(() => {
+    const radius = MIN_RADIUS + RADIUS_RANGE * Math.random();
+    const speed = MIN_SPEED + RANGE_SPEED * Math.random();
+    const fstTurbulence = 2 + 2 * Math.random();
+    const sndTurbulence = 1 + Math.random();
+    const trdTurbulence = Math.random();
+    const rhythm = (x: number) => {
+      return (
+        Math.sin(x / fstTurbulence) +
+        Math.sin(x * sndTurbulence) / sndTurbulence +
+        Math.sin(x * (trdTurbulence / (1 + trdTurbulence)))
+      );
+    };
+    return new Circle(
+      getRandomPosition(boundaries, PADDING_SPAWN),
+      Vector2.RandomUnitVector(),
+      speed * distance,
+      rhythm,
+      radius * distance,
+    );
+  });
 };
