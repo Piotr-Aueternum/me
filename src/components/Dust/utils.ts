@@ -76,16 +76,18 @@ export const generateCircles = (count: number, distance: number = 1) => {
   return [...new Array(count)].map(() => {
     const radius = MIN_RADIUS + RADIUS_RANGE * Math.random();
     const speed = MIN_SPEED + RANGE_SPEED * Math.random();
-    const fstTurbulence = 2 + 2 * Math.random();
-    const sndTurbulence = 1 + Math.random();
-    const trdTurbulence = Math.random();
+
     const rhythm = (x: number) => {
+      const fstTurbulence = 2 + 2 * Math.random();
+      const sndTurbulence = 1 + Math.random();
+      const trdTurbulence = Math.random();
       return (
         Math.sin(x / fstTurbulence) +
         Math.sin(x * sndTurbulence) / sndTurbulence +
         Math.sin(x * (trdTurbulence / (1 + trdTurbulence)))
       );
     };
+
     return new Circle(
       new Vector2(0, 0),
       Vector2.RandomUnitVector(),
