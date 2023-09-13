@@ -107,22 +107,19 @@ export const generateCircles = (
 };
 
 export function useWindowSize() {
-  const isSSR = typeof window !== "undefined";
   const [windowSize, setWindowSize] = React.useState({
-    width: isSSR ? 1200 : window.innerWidth,
-    height: isSSR ? 800 : window.innerHeight,
+    width: 1200,
+    height: 800,
   });
 
-  function changeWindowSize() {
-    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-  }
-
   React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    function changeWindowSize() {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    }
     window.addEventListener("resize", changeWindowSize);
-
-    return () => {
-      window.removeEventListener("resize", changeWindowSize);
-    };
+    changeWindowSize();
+    return () => window.removeEventListener("resize", changeWindowSize);
   }, []);
 
   return windowSize;
