@@ -53,7 +53,7 @@ const useParticles = () => {
     });
   };
   const [state, setState] = useState<State | null>(null);
-  if (canvas && state === null) {
+  if (window && canvas && state === null) {
     setState(
       new State(
         [
@@ -104,7 +104,6 @@ const useParticles = () => {
 
 export const Dust = ({ className }: { className: string }) => {
   const { width, height, setCanvas } = useParticles();
-  console.log(width, height);
   return (
     <canvas
       className={className}
