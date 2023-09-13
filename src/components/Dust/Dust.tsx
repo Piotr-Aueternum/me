@@ -53,7 +53,7 @@ const useParticles = () => {
     });
   };
   const [state, setState] = useState<State | null>(null);
-  if (window && canvas && state === null) {
+  if (typeof window !== "undefined" && canvas && state === null) {
     setState(
       new State(
         [
