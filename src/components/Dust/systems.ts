@@ -4,7 +4,8 @@ import { State } from "./state";
 import { getRandomPosition, Vector2 } from "./utils";
 
 export interface System {
-  Update(state: State): void;
+  Start?(state: State): void;
+  Update?(state: State): void;
 }
 
 export class EntitiesMovementSystem implements System {
@@ -52,6 +53,15 @@ export class EntitiesRespawnSystem implements System {
       ) {
         entity.position = getRandomPosition(state.boundaries, PADDING_SPAWN);
       }
+    };
+    state.entities.forEach(RespawnEntity);
+  }
+}
+
+export class EntitiesRandomSpawnSystem implements System {
+  public Start(state: State) {
+    const RespawnEntity = (entity: Entity) => {
+      entity.position = getRandomPosition(state.boundaries, PADDING_SPAWN);
     };
     state.entities.forEach(RespawnEntity);
   }

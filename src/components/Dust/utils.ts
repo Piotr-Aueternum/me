@@ -1,10 +1,4 @@
-import {
-  MIN_RADIUS,
-  MIN_SPEED,
-  PADDING_SPAWN,
-  RADIUS_RANGE,
-  RANGE_SPEED,
-} from "./const";
+import { MIN_RADIUS, MIN_SPEED, RADIUS_RANGE, RANGE_SPEED } from "./const";
 import { Circle, Entity } from "./entities";
 
 export const getRandomPosition = (boundaries: Vector2, padding: number = 0) =>
@@ -78,11 +72,7 @@ export class FadingCircle {
   ) {}
 }
 
-export const generateCircles = (
-  count: number,
-  boundaries: Vector2,
-  distance: number = 1,
-) => {
+export const generateCircles = (count: number, distance: number = 1) => {
   return [...new Array(count)].map(() => {
     const radius = MIN_RADIUS + RADIUS_RANGE * Math.random();
     const speed = MIN_SPEED + RANGE_SPEED * Math.random();
@@ -97,7 +87,7 @@ export const generateCircles = (
       );
     };
     return new Circle(
-      getRandomPosition(boundaries, PADDING_SPAWN),
+      new Vector2(0, 0),
       Vector2.RandomUnitVector(),
       speed * distance,
       rhythm,
