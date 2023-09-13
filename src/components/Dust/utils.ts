@@ -1,13 +1,16 @@
-import { Entity } from './entities';
+import { Entity } from "./entities";
 
 export const getRandomPosition = (boundaries: Vector2, padding: number = 0) =>
   new Vector2(
     (boundaries.x - padding) * Math.random() + padding / 2,
-    (boundaries.y - padding) * Math.random() + padding / 2
+    (boundaries.y - padding) * Math.random() + padding / 2,
   );
 
 export class Vector2 {
-  constructor(public readonly x: number, public readonly y: number) {}
+  constructor(
+    public readonly x: number,
+    public readonly y: number,
+  ) {}
   public static RandomUnitVector() {
     const random = Math.random() * (2 * Math.PI);
     return new Vector2(Math.cos(random), Math.sin(random));
@@ -35,7 +38,7 @@ export const generateEntityPairs = (entities: Entity[], threshold: number) => {
       const destination = entities[j];
       const distance = Math.hypot(
         destination.position.x - start.position.x,
-        destination.position.y - start.position.y
+        destination.position.y - start.position.y,
       );
       if (distance < threshold) pairs.push([start, destination]);
     }
@@ -48,7 +51,7 @@ export class ColorRGBA {
     public r: number,
     public g: number,
     public b: number,
-    public a: number
+    public a: number,
   ) {}
   toString() {
     return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
@@ -62,12 +65,12 @@ export class FadingCircle {
   constructor(
     public fadingStart: number,
     public sizeFadingStart: number,
-    public color: ColorRGBA
+    public color: ColorRGBA,
   ) {}
 }
 
 export const calculateCanvasRatio = (canvas: HTMLCanvasElement | null) => {
-  const isSSR = typeof window === 'undefined';
+  const isSSR = typeof window === "undefined";
   if (isSSR) {
     return { width: 100, height: 100 };
   }
@@ -75,10 +78,10 @@ export const calculateCanvasRatio = (canvas: HTMLCanvasElement | null) => {
   const [h, w] = canvas
     ? window
         .getComputedStyle(canvas)
-        .getPropertyValue('aspect-ratio')
-        .replace('auto', '')
+        .getPropertyValue("aspect-ratio")
+        .replace("auto", "")
         .trim()
-        .split(' / ')
+        .split(" / ")
         .map(Number)
     : [width, window.innerHeight];
   const height = (w * width) / h;

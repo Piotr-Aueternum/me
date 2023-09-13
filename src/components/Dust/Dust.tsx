@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import { Circle } from "./entities";
-import {
-  EntitiesBoundariesSystem,
-  EntitiesMovementSystem,
-  System,
-} from "./systems";
+
 import {
   CIRCLE_RENDER_RULES,
   MIN_RADIUS,
@@ -12,10 +7,16 @@ import {
   RADIUS_RANGE,
   RANGE_SPEED,
 } from "./const";
+import { Circle } from "./entities";
 import { CircleRenderer, Renderer } from "./renderers";
-import { Vector2, calculateCanvasRatio, getRandomPosition } from "./utils";
-import { useRenderEngine } from "./useRenderEngine";
 import { State } from "./state";
+import {
+  EntitiesBoundariesSystem,
+  EntitiesMovementSystem,
+  System,
+} from "./systems";
+import { useRenderEngine } from "./useRenderEngine";
+import { calculateCanvasRatio, getRandomPosition, Vector2 } from "./utils";
 
 const useParticles = () => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);

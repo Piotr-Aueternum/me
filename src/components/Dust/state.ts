@@ -1,5 +1,5 @@
-import { Entity } from './entities';
-import { FadingCircle, Vector2 } from './utils';
+import { Entity } from "./entities";
+import { FadingCircle, Vector2 } from "./utils";
 
 export class State {
   public deltaTime: number = 0;
@@ -8,6 +8,6 @@ export class State {
     public entities: Entity[],
     public boundaries: Vector2,
     public border: number,
-    public circleRules: FadingCircle[]
+    public circleRules: FadingCircle[],
   ) {}
 }

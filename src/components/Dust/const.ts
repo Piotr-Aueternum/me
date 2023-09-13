@@ -1,4 +1,4 @@
-import { ColorRGBA, FadingCircle } from './utils';
+import { ColorRGBA, FadingCircle } from "./utils";
 
 export const MIN_SPEED = 0.12;
 export const RANGE_SPEED = 0.12;

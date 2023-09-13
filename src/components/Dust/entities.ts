@@ -1,11 +1,11 @@
-import { Vector2 } from './utils';
+import { Vector2 } from "./utils";
 
 export class Entity {
   constructor(
     public position: Vector2,
     private _direction: Vector2,
     public speed: number,
-    public rhythm: (time: number) => number
+    public rhythm: (time: number) => number,
   ) {
     this._direction = _direction.normalized();
   }
@@ -24,7 +24,7 @@ export class Circle extends Entity {
     _direction: Vector2,
     speed: number,
     rhythm: (time: number) => number,
-    public radius: number
+    public radius: number,
   ) {
     super(position, _direction, speed, rhythm);
   }

@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
-import { Renderer } from './renderers';
-import { System } from './systems';
-import { State } from './state';
+import { useEffect } from "react";
+
+import { Renderer } from "./renderers";
+import { State } from "./state";
+import { System } from "./systems";
 
 export const useRenderEngine = ({
   renderers,

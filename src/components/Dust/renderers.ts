@@ -1,6 +1,6 @@
-import { Circle, Entity } from './entities';
-import { State } from './state';
-import { Vector2, generateEntityPairs } from './utils';
+import { Circle, Entity } from "./entities";
+import { State } from "./state";
+import { generateEntityPairs, Vector2 } from "./utils";
 
 export interface Renderer {
   Render(context: CanvasRenderingContext2D, state: State): void;
@@ -18,16 +18,16 @@ export class CircleRenderer implements Renderer {
         0,
         circle.position.x,
         circle.position.y,
-        circle.radius
+        circle.radius,
       );
       const sortedCircleRenderRules = state.circleRules.toSorted(
-        (a, b) => a.sizeFadingStart - b.sizeFadingStart
+        (a, b) => a.sizeFadingStart - b.sizeFadingStart,
       );
       for (const fadingCircle of sortedCircleRenderRules) {
         if (circle.radius < fadingCircle.sizeFadingStart) {
           radgrad.addColorStop(
             fadingCircle.fadingStart,
-            fadingCircle.color.toString()
+            fadingCircle.color.toString(),
           );
           radgrad.addColorStop(1, fadingCircle.color.withAlpha(0).toString());
           break;
@@ -39,7 +39,7 @@ export class CircleRenderer implements Renderer {
         circle.position.x - circle.radius,
         circle.position.y - circle.radius,
         circle.radius * 2,
-        circle.radius * 2
+        circle.radius * 2,
       );
 
       context.fill();
@@ -53,7 +53,7 @@ export class LineRenderer implements Renderer {
   constructor(
     private threshold: number,
     private color: string,
-    private width: number = 1
+    private width: number = 1,
   ) {}
   Render(context: CanvasRenderingContext2D, state: State) {
     const DrawLine = (start: Vector2, destination: Vector2) => {

@@ -1,6 +1,6 @@
-import { Entity } from './entities';
-import { State } from './state';
-import { Vector2 } from './utils';
+import { Entity } from "./entities";
+import { State } from "./state";
+import { Vector2 } from "./utils";
 
 export interface System {
   Update(state: State): void;

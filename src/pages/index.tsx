@@ -1,8 +1,8 @@
-import * as React from "react";
 import type { HeadFC, PageProps } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image";
-import { Dust } from "../components/Dust";
-import { SocialMedia } from "../components/SocialMedia";
+import * as React from "react";
+import { Dust } from "@components/Dust";
+import { SocialMedia } from "@components/SocialMedia";
 
 const IndexPage: React.FC<PageProps> = () => {
   return (

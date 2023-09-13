@@ -1,4 +1,4 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+const defaultTheme = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -8,15 +8,15 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      sans: ['Dosis', ...defaultTheme.fontFamily.sans],
-      serif: ['Hepta Slab', ...defaultTheme.fontFamily.serif],
+      sans: ["Dosis", ...defaultTheme.fontFamily.sans],
+      serif: ["Hepta Slab", ...defaultTheme.fontFamily.serif],
     },
     extend: {
       height: {
-        screen: ['100vh', '100dvh'],
+        screen: ["100vh", "100dvh"],
       },
       width: {
-        screen: ['100vw', '100dvw'],
+        screen: ["100vw", "100dvw"],
       },
     },
   },
