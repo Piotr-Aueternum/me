@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import { Circle } from './entities';
+import React, { useState } from "react";
+import { Circle } from "./entities";
 import {
   EntitiesBoundariesSystem,
   EntitiesMovementSystem,
   System,
-} from './systems';
+} from "./systems";
 import {
   CIRCLE_RENDER_RULES,
   MIN_RADIUS,
   MIN_SPEED,
   RADIUS_RANGE,
   RANGE_SPEED,
-} from './const';
-import { CircleRenderer, Renderer } from './renderers';
-import { Vector2, calculateCanvasRatio, getRandomPosition } from './utils';
-import { useRenderEngine } from './useRenderEngine';
-import { State } from './state';
+} from "./const";
+import { CircleRenderer, Renderer } from "./renderers";
+import { Vector2, calculateCanvasRatio, getRandomPosition } from "./utils";
+import { useRenderEngine } from "./useRenderEngine";
+import { State } from "./state";
 
 const useParticles = () => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
-  const context = canvas?.getContext('2d')!;
+  const context = canvas?.getContext("2d")!;
 
   const { width, height } = calculateCanvasRatio(canvas);
   const boundaries = new Vector2(width, height);
@@ -43,7 +43,7 @@ const useParticles = () => {
         Vector2.RandomUnitVector(),
         speed * distance,
         rhythm,
-        radius * distance
+        radius * distance,
       );
     });
   };
@@ -58,8 +58,8 @@ const useParticles = () => {
         ],
         boundaries,
         50,
-        CIRCLE_RENDER_RULES
-      )
+        CIRCLE_RENDER_RULES,
+      ),
     );
   }
 
