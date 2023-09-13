@@ -1,6 +1,7 @@
+import { PADDING_SPAWN } from "./const";
 import { Entity } from "./entities";
 import { State } from "./state";
-import { Vector2 } from "./utils";
+import { getRandomPosition, Vector2 } from "./utils";
 
 export interface System {
   Update(state: State): void;
@@ -37,5 +38,21 @@ export class EntitiesBoundariesSystem implements System {
       entity.direction = new Vector2(x, y);
     };
     state.entities.forEach(RedirectEntity);
+  }
+}
+
+export class EntitiesRespawnSystem implements System {
+  public Update(state: State) {
+    const RespawnEntity = (entity: Entity) => {
+      if (
+        entity.position.y > state.boundaries.y + state.border ||
+        entity.position.y < 0 - state.border ||
+        entity.position.x > state.boundaries.x + state.border ||
+        entity.position.x < 0 - state.border
+      ) {
+        entity.position = getRandomPosition(state.boundaries, PADDING_SPAWN);
+      }
+    };
+    state.entities.forEach(RespawnEntity);
   }
 }

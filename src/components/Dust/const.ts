@@ -5,6 +5,7 @@ export const RANGE_SPEED = 0.12;
 export const MIN_RADIUS = 8;
 export const RADIUS_RANGE = 3;
 export const MAX_RADIUS = MIN_RADIUS + RADIUS_RANGE;
+export const PADDING_SPAWN = 20;
 
 export const CIRCLE_RENDER_RULES = [
   new FadingCircle(0.3, MAX_RADIUS * 0.5, new ColorRGBA(160, 160, 160, 0.3)),

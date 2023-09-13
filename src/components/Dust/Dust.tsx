@@ -4,6 +4,7 @@ import {
   CIRCLE_RENDER_RULES,
   MIN_RADIUS,
   MIN_SPEED,
+  PADDING_SPAWN,
   RADIUS_RANGE,
   RANGE_SPEED,
 } from "./const";
@@ -13,6 +14,7 @@ import { State } from "./state";
 import {
   EntitiesBoundariesSystem,
   EntitiesMovementSystem,
+  EntitiesRespawnSystem,
   System,
 } from "./systems";
 import { useRenderEngine } from "./useRenderEngine";
@@ -42,7 +44,7 @@ const useParticles = () => {
         );
       };
       return new Circle(
-        getRandomPosition(boundaries, 20),
+        getRandomPosition(boundaries, PADDING_SPAWN),
         Vector2.RandomUnitVector(),
         speed * distance,
         rhythm,
@@ -87,6 +89,7 @@ const useParticles = () => {
   const systems: System[] = [
     new EntitiesMovementSystem(),
     new EntitiesBoundariesSystem(),
+    new EntitiesRespawnSystem(),
   ];
 
   useRenderEngine({
