@@ -25,7 +25,7 @@ export const engine = ({
     context.restore();
   };
 
-  const fps = 60;
+  const fps = 24;
   const second = 1000;
   const desiredFrameRate = second / fps;
 
@@ -33,17 +33,22 @@ export const engine = ({
   let lastTimestamp = 0;
   let time = 0;
   const loop = (timestamp: number) => {
-    window.requestAnimationFrame(loop);
+    setTimeout(() => {
+      window.requestAnimationFrame(loop);
 
-    deltaTime = (timestamp - lastTimestamp) / desiredFrameRate;
-    lastTimestamp = timestamp;
-    time += deltaTime;
-    if (state) {
-      state.deltaTime = deltaTime;
-      state.time = time;
-    }
+      {
+        deltaTime = (timestamp - lastTimestamp) / desiredFrameRate;
+        lastTimestamp = timestamp;
+        time += deltaTime;
+      }
 
-    update();
+      {
+        state.deltaTime = deltaTime;
+        state.time = time;
+      }
+
+      update();
+    }, desiredFrameRate);
   };
   const start = () => {
     systems.forEach((system) => {

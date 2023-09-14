@@ -1,7 +1,7 @@
 import { ColorRGBA, FadingCircle } from "./utils";
 
-export const MIN_SPEED = 0.12;
-export const RANGE_SPEED = 0.12;
+export const MIN_SPEED = 0.24;
+export const RANGE_SPEED = 0.24;
 export const MIN_RADIUS = 8;
 export const RADIUS_RANGE = 3;
 export const MAX_RADIUS = MIN_RADIUS + RADIUS_RANGE;
