@@ -32,7 +32,7 @@ export class Vector2 {
 }
 
 export const generateEntityPairs = (
-  entities: Entity[],
+  entities: readonly Entity[],
   threshold: number,
 ): [Entity, Entity][] => {
   const pairs: [Entity, Entity][] = [];
@@ -75,28 +75,43 @@ export class FadingCircle {
   ) {}
 }
 
-export const generateCircles = (count: number, distance: number = 1) => {
-  return [...new Array(count)].map(() => {
-    const radius = MIN_RADIUS + RADIUS_RANGE * Math.random();
-    const speed = MIN_SPEED + RANGE_SPEED * Math.random();
+export const generateCircle = (
+  distance: number = 1,
+  position = new Vector2(0, 0),
+) => {
+  const radius = MIN_RADIUS + RADIUS_RANGE * Math.random();
+  const speed = MIN_SPEED + RANGE_SPEED * Math.random();
 
-    const rhythm = (x: number) => {
-      const fstTurbulence = 2 + 2 * Math.random();
-      const sndTurbulence = 1 + Math.random();
-      const trdTurbulence = Math.random();
-      return (
-        Math.sin(x / fstTurbulence) +
-        Math.sin(x * sndTurbulence) / sndTurbulence +
-        Math.sin(x * (trdTurbulence / (1 + trdTurbulence)))
-      );
-    };
-
-    return new Circle(
-      new Vector2(0, 0),
-      Vector2.RandomUnitVector(),
-      speed * distance,
-      rhythm,
-      radius * distance,
+  const rhythm = (x: number) => {
+    const fstTurbulence = 2 + 2 * Math.random();
+    const sndTurbulence = 1 + Math.random();
+    const trdTurbulence = Math.random();
+    return (
+      Math.sin(x / fstTurbulence) +
+      Math.sin(x * sndTurbulence) / sndTurbulence +
+      Math.sin(x * (trdTurbulence / (1 + trdTurbulence)))
     );
-  });
+  };
+
+  return new Circle(
+    position,
+    Vector2.RandomUnitVector(),
+    speed * distance,
+    rhythm,
+    radius * distance,
+  );
+};
+
+export const generateCircles = (count: number, distance: number = 1) => {
+  return [...new Array(count)].map(() => generateCircle(distance));
+};
+
+export const getRelativePosition = (
+  event: MouseEvent,
+  element: HTMLElement,
+) => {
+  let rect = element.getBoundingClientRect();
+  let x = event.clientX - rect.left;
+  let y = event.clientY - rect.top;
+  return { x, y };
 };
