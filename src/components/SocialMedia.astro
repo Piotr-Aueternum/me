@@ -25,33 +25,53 @@ const services = [
 ---
 
 <ul class="mt-4 flex items-center gap-4 text-lg dark:text-slate-100">
-  {services.map((service) => (
-    <li>
-      <a
-        class="block text-blue-600 dark:text-amber-300"
-        target="_blank"
-        rel="noreferrer"
-        href={service.href}
-      >
-        <img
-          src={service.icon.src}
-          alt={service.icon.alt}
-          width={30}
-          height={30}
-        />
-      </a>
-    </li>
-  ))}
+  {
+    services.map((service) => (
+      <li>
+        <a
+          class="block text-blue-600 dark:text-amber-300"
+          target="_blank"
+          rel="noreferrer"
+          href={service.href}
+        >
+          <img
+            src={service.icon.src}
+            alt={service.icon.alt}
+            width={30}
+            height={30}
+          />
+        </a>
+      </li>
+    ))
+  }
   <li>
     <a
       class="block text-blue-600 dark:text-amber-300"
       target="_blank"
       rel="noreferrer"
-      href="https://drive.google.com/file/d/1eAl1jcbRizvCCeljzz7c3dymy8BZQhDf/view?usp=drive_link"
+      href="https://drive.google.com/file/d/1xFyNcjsMJ7U4Dmpuw7wl7PVtkHo4zZha/view?usp=sharing"
+      title="Résumé"
     >
-      <div class="flex h-8 w-8 items-center justify-center rounded-md border-2 border-slate-50 font-bold uppercase text-slate-50">
-        cv
+      <div
+        class="flex h-8 w-8 items-center justify-center rounded-md border-2 border-slate-50 font-bold first-letter:uppercase text-slate-50"
+      >
+        Ré
       </div>
     </a>
   </li>
+  <!-- <li>
+    <a
+      class="block text-blue-600 dark:text-amber-300"
+      target="_blank"
+      rel="noreferrer"
+      href="https://drive.google.com/file/d/1eAl1jcbRizvCCeljzz7c3dymy8BZQhDf/view?usp=drive_link"
+      title="Curriculum vitae"
+    >
+      <div
+        class="flex h-8 w-8 items-center justify-center rounded-md border-2 border-slate-50 font-bold uppercase text-slate-50"
+      >
+        cv
+      </div>
+    </a>
+  </li> -->
 </ul>
