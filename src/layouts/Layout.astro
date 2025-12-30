@@ -10,6 +10,34 @@ const { title } = Astro.props;
 <!doctype html>
 <html lang="en">
   <head>
+    <script is:inline>
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      const toggle = () => {
+        document.documentElement.classList.toggle(
+          "dark",
+          localStorage.theme === "dark" ||
+            (!("theme" in localStorage) &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches)
+        );
+        if (localStorage.theme === "dark") {
+          document.documentElement.dataset.theme = "dark";
+        } else if (
+          !("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+        ) {
+          document.documentElement.dataset.theme = "auto";
+        } else {
+          document.documentElement.dataset.theme = "light";
+        }
+        document
+          .querySelectorAll("button.theme-active")
+          .forEach((el) => el.classList.remove("theme-active"));
+        document
+          .querySelector(`#theme-${document.documentElement.dataset.theme}`)
+          ?.classList.add("theme-active");
+      };
+      toggle();
+    </script>
     <style is:global>
       @import url("https://fonts.googleapis.com/css2?family=Dosis&family=Hepta+Slab:wght@300&display=swap");
     </style>
@@ -24,6 +52,35 @@ const { title } = Astro.props;
   </head>
 
   <body>
+    <ul class="flex gap-1 p-1">
+      <li>
+        <button
+          class="bg-accent p-1"
+          id="theme-light"
+          onclick="localStorage.theme = 'light';toggle();"
+        >
+          light
+        </button>
+      </li>
+      <li>
+        <button
+          class="bg-accent p-1"
+          id="theme-dark"
+          onclick="localStorage.theme = 'dark';toggle();"
+        >
+          dark
+        </button>
+      </li>
+      <li>
+        <button
+          class="bg-accent p-1"
+          id="theme-auto"
+          onclick="localStorage.removeItem('theme');toggle();"
+        >
+          auto
+        </button>
+      </li>
+    </ul>
     <slot />
   </body>
 
@@ -41,6 +98,9 @@ const { title } = Astro.props;
         Bitstream Vera Sans Mono,
         Courier New,
         monospace;
+    }
+    .theme-active {
+      border: blue 2px solid;
     }
   </style>
 </html>

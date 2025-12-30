@@ -1,0 +1,27 @@
+---
+import type { ReferenceDataEntry } from "astro:content";
+import { getEntry } from "astro:content";
+
+interface Props {
+  categories: ReferenceDataEntry<"categories", string>[];
+}
+
+const categories = (
+  await Promise.all(
+    Astro.props.categories.map((category) =>
+      getEntry(category.collection, category.id)
+    )
+  )
+).filter((category) => category !== undefined);
+---
+
+{
+  categories.map((category) => (
+    <a
+      href="#"
+      class="relative z-10 mx-1 block rounded-full px-3 py-1.5 text-sm font-medium"
+    >
+      {category.data.name}
+    </a>
+  ))
+}

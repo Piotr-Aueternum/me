@@ -1,0 +1,193 @@
+---
+title: How to create Resources Manager in Astro & Keystatic for C++ game
+description: >-
+  Using Astro@4 and Keystatic as Relational Resources Database for game.
+  Resource is entity with data in form of file. It can be used for audio,
+  images, maps, sprites or items and enemies.
+hero: >-
+  /public/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/hero.png
+publishDate: 2025-06-17
+author: piotr-sochacz
+categories:
+  - cms
+  - gamedev
+  - webdev
+  - git
+---
+## Intro
+
+Proof of concept for resources management in C++ game to maintain relations between items, npc or abilities.
+
+### Jargon
+
+What is a Resource? Resource is data container which can refer to other resources and doesn't provide any life cycles methods. It can contain data for specific audio, image, texture, item, items repo or npc. We can also create a reference to other resource within a resource to create more complex data structures.
+
+This concept is more common in gamedev as a [Resource](https://docs.godotengine.org/en/stable/tutorials/scripting/resources.html), [ScriptableObject](https://docs.unity3d.com/6000.3/Documentation/Manual/class-ScriptableObject.html) or [DataAsset](https://dev.epicgames.com/documentation/en-us/unreal-engine/data-assets-in-unreal-engine). If I'd look for similar example in webdev I think it could be Store for e.g [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction#first-create-a-store). We create a file with the store which has initial data and we use it anywhere in application similar to Resources.
+
+### Motivation
+
+As I wanted to learn more about [ECS](https://en.wikipedia.org/wiki/Entity_component_system) - similar to databases you have to event create a relationship table for the entities in ECS to have references between the entities such as Player - Equipped - Item.
+
+Project techstack: C++, [entt](https://github.com/skypjack/entt) and [sfml](https://github.com/SFML/SFML). At first it was a bit tough to wrap my head around that but when it clicked it was quite easy to create more and more logic. 
+
+At some point it started being problematic to maintain all the data for the game. A lot of files with magic strings as references that are unmaintainable for a human being.
+
+To solve that I created PoC using tools I know. It helped to reduce fatigue of maintaining proper ids between more complex resources.
+
+## Implementation
+
+In gdscript it's clean and straightforward as Resource is first-class citizen in the engine. On top of that the gdscript is a custom langauge for the Godot with a python-like syntax.
+
+### Godot
+
+Code:
+
+```gdscript
+# enemy.gd
+extends Resource
+class_name Enemy
+
+# export annotation for editor preview visibility
+@export var item_mainhand: Item
+@export var item_helmet: Item
+@export var item_armor: Item
+@export var experience: int = 0
+```
+
+Editor preview:
+
+![Preview of exported fields from code example](/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/Pasted%20image%2020250217232724.png)
+
+Resources are powerful yet simple data structures. Accessible from both editor ui and text editors(for advanced developers).
+
+### Astro
+
+How can we achieve similar outcome using Astro and Keystatic? For that I'm using Astro collections and Keystatic CMS. First way is native using `collection` schema.
+
+#### fields.relationship
+
+We need to define collection in keystatic:
+
+```typescript
+export default config({
+  collections: {
+    units: collection({
+      label: "Units",
+      path: "src/content/units/*",
+      format: "json",
+      schema: {
+        unit: ANfields.unit({
+          head: fields.relationship({
+            label: "Head",
+            collection: 'items',
+          }),
+        }),
+      },
+    }),
+  },
+});
+```
+
+#### astro:content
+
+*The other one is "hacky" which is deprecated in latest versions of Astro it works only at version 4 as Keystatic is considered "client" instead of "server" and we can't access astro:content anymore inside keystatic.config.ts. I read that it can be achieved through API but I haven't check that yet.*
+
+Coming back to second option. For that case I'm using `import { getCollection } from 'astro:content';` and `mode: hybrid` in astro.config.mjs file along with adapter.
+
+Utility function:
+
+```typescript
+const items = await getCollection('items');
+
+const itemsOptions = items.map(item => ({
+  label: item.id === '0' ? 'None' : `${item.data.name}@${item.data.slot}`,
+  value: item.id
+}));
+
+const selectItems = ({label}: {label: string}) => ({
+  ...fields.select({
+    label,
+    options: itemsOptions,
+    defaultValue: '0'
+  }),
+  serialize(value: string) {
+    return { value };
+  },
+});
+```
+
+Why bothering using `getCollection` and using `fields.select`? If you want to have more control over render of options. You can use that approach lets say that items are stored using ids or we want to filter them based on other data like which slot it is equipped in? For that matter we can write this extra logic to make sure that this unit won't wear sword as a helmet.
+
+Well `fields.relationship` doesn't gives much freedom in control over labels it just displays slug in this case for items it would be just number or string which isn't helpful. But with this I can create custom label or even filter them out based on field type for e.g I could filter all non-helmet items from Head selector why would you want to wear a Sword on your head? I'm a fan of tools that will be still intuitive one year later just less things to remember and worry about because validation will handle it.
+
+## Result
+
+![Select field in Keystatic with collection of items](/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/Pasted%20image%2020250217233947.png)
+
+As you can see there is a character wearing items like sword, shield, helmet etc. I created custom field for that purpose which displays items in similar position as in game and shows how they will look or if they are correct. You can see error more easily.
+
+![Collection of items equipped by unit](/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/Pasted%20image%2020250217234353.png)
+
+```tsx
+import { getCollection } from "astro:content";
+
+const items = await getCollection("items");
+
+const UnitFieldInput = ({ schema, fields }) => {
+  const sprite = items
+    .find(
+      item => item.id === fields.mainhand.value
+    )
+    .data.sprite;
+  return (
+    <div>
+      {Object.values(fields)
+        .map(
+          Field => <Field.schema.Input {...Field} {...Field.schema} />
+        )
+      }
+      <div style={{
+        backgroundImage: 'url(/units.png)',
+        backgroundPosition: `${-fields.x.value}px ${fields.y.value}px`,
+      }} />
+      <div style={{
+        position: "absolute",
+        width: sprite.width,
+        height: sprite.height,
+        backgroundImage: 'url(/items.png)',
+        backgroundPosition: `${-sprite.x}px ${sprite.y}px`,
+      }} />
+    </div>
+  );
+};
+```
+
+I've seen some people creating bindings to use Unity editor for their engine but I wasn't familiar with the topic and I disliked creating custom editor in Unity using Imgui. As a Frontend Developer I decided to stay with Astro and Keystatic that I used in past for Git-based CMS side projects. In future I could consider creating bindings in Godot as it is flexible tool with pleasant format for custom plugins in editor. My knowledge of React helps as well to create it quickly. Setup of astro and keystatic, creating items, units schema and binding it to C++ took one day of my free time. Even more I can use that later to create a Wikipedia(Thanks [Bartosz](https://laniewski.me/) for that idea ✌🏻).
+
+### Output
+
+```json
+// src/content/units/0.json
+{
+  "name": "Player",
+  "unit": {
+    "x": 0,
+    "y": 0,
+    "head": 3,
+    "chest": 0,
+    "cape": 5,
+    "mainShoulder": 4,
+    "offShoulder": 4,
+    "mainhand": 8,
+    "offhand": 6
+  }
+}
+```
+
+Then I can load it anywhere. In my case it will be `nlohmann::json` within C++ project. I have unit, I have item ids equipped by that unit. Having item id I can extract item data and sprite for the renderer.
+
+## Materials
+
+Unity - [Game architecture with ScriptableObject](https://www.youtube.com/watch?v=raQ3iHhE_Kk) (1h)
+
+Godot - [Custom resources for global state management](https://www.youtube.com/watch?v=1qHPKg_Xovs) (7m)

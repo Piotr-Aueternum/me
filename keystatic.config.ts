@@ -1,4 +1,3 @@
-// keystatic.config.ts
 import { config, fields, collection } from "@keystatic/core";
 
 export default config({
@@ -16,7 +15,7 @@ export default config({
         image: fields.image({
           label: "Image URL",
           directory: "public/images/authors",
-          publicPath: "/images/authors",
+          publicPath: "/public/images/authors",
           validation: { isRequired: false },
         }),
       },
@@ -42,6 +41,12 @@ export default config({
           label: "Description",
           validation: { isRequired: true },
         }),
+        hero: fields.image({
+          label: "Hero image",
+          directory: "public/images/blog",
+          publicPath: "/public/images/blog",
+          validation: { isRequired: true },
+        }),
         publishDate: fields.date({
           label: "Publish Date",
           validation: { isRequired: true },
@@ -59,7 +64,7 @@ export default config({
         }),
         content: fields.markdoc({
           label: "Content",
-          extension: "md",
+          extension: "mdoc",
           options: {
             image: {
               directory: "public/images/blog",
