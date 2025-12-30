@@ -1,0 +1,56 @@
+---
+import type { ReferenceDataEntry } from "astro:content";
+import ArticleAuthor from "../ArticleAuthor/ArticleAuthor.astro";
+import { getEntry } from "astro:content";
+
+interface Props {
+  authorId: string;
+  categories: ReferenceDataEntry<"categories", string>[];
+  publishDate: string;
+  year: string;
+  month: string;
+  slug: string;
+  title: string;
+  description: string;
+}
+
+const { authorId, publishDate, description, title, year, month, slug } =
+  Astro.props;
+const categories = (
+  await Promise.all(
+    Astro.props.categories.map((category) =>
+      getEntry(category.collection, category.id),
+    ),
+  )
+).filter((category) => category !== undefined);
+---
+
+<article class="flex max-w-xl flex-col items-start justify-between">
+  <div class="flex items-center gap-x-4 text-xs">
+    <time datetime="2020-03-16" class="text-gray-500">{publishDate}</time>
+    {
+      categories.map((category) => (
+        <a
+          href="#"
+          class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"
+        >
+          {category.data.name}
+        </a>
+      ))
+    }
+  </div>
+  <div class="group relative">
+    <h3
+      class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+    >
+      <a href={`${year}/${month}/${slug}`}>
+        <span class="absolute inset-0"></span>
+        {title}
+      </a>
+    </h3>
+    <p class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+      {description}
+    </p>
+  </div>
+  <ArticleAuthor authorId={authorId} />
+</article>

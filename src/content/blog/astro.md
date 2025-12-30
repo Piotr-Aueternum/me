@@ -1,0 +1,265 @@
+---
+title: How to create Git-friendly Resources Database using Astro & Keystatic
+author: piotr-sochacz
+description: >-
+  Using Astro@4 and Keystatic as Relational Resources Database for game.
+  Resource is entity with data in form of file. It can be used for audio, images, maps, sprites or items and enemies.
+categories:
+  - gamedev
+publishDate: 2025-06-15
+---
+
+Using Astro@4 and Keystatic as Relational Resources Database for a game.
+Resource takes a form of a file with data. It can be used for items, NPCs or locations.
+
+We can also use other resources inside resource that can create complex relationships between resources.
+
+This concept is more known in gamedev:
+
+- Godot - **Resource**
+- Unity - **ScriptableObject**
+- Unreal - **DataAsset**
+
+In Godot it looks like this:
+
+```gdscript
+extends Resource
+class_name Enemy
+
+@export var item_mainhand: Item
+@export var experience: int = 0
+
+var enemy = preload("res://character/enemy/enemy.tscn")
+
+func instantiate() -> EnemyUnit:
+	var enemy_instance = enemy.instantiate() as EnemyUnit
+	enemy_instance.item_mainhand = item_mainhand
+
+	return enemy_instance
+```
+
+We create a script that extends Resource and then we can declare properties with `@export ` to make them available in more convenient way through editor:
+![[Pasted image 20250217232724.png]]
+
+It's easy to create multiple files and use them where we need them in unified way.
+In future I may create another post about designing them in such a way to create easier to maintain templates with only needed fields.
+![[Pasted image 20250217232808.png]]
+
+How to achieve similar outcome using Astro and Keystatic?
+For that I'm using Astro collections and load them in Keystatic config file in both ways.
+First is native using `collection` schema.
+
+```typescript
+units: collection({
+  label: "Units",
+  slugField: "id",
+  columns: ["name"],
+  path: "src/content/units/*",
+  format: "json",
+  schema: {
+    id: fields.text({
+      label: "Id",
+      validation: {
+        isRequired: true,
+      },
+    }),
+    name: fields.text({
+      label: "Name",
+      validation: {
+        isRequired: true,
+      },
+    }),
+    unit: ANfields.unit({
+      x: fields.number({
+        label: "Position X",
+        validation: {
+          isRequired: true,
+        },
+      }),
+      y: fields.number({
+        label: "Position Y",
+        validation: {
+          isRequired: true,
+        },
+      }),
+      head: selectItems({
+        label: "Head",
+      }),
+    }),
+  },
+});
+```
+
+The other one is "hacky" which is deprecated in later versions of astro it works only at version 4.
+For that case I'm using `import { getCollection } from 'astro:content';` and hybrid mode.
+
+```typescript
+const items = await getCollection('items'); // <- collections extracted
+const itemsOptions = items.map(item => ({label: item.id === '0' ? 'None' : `${item.data.name}@${item.data.slot}`, value: item.id})) // <- map for the select field
+
+const selectItems = ({label}: {label: string}) => ({
+  ...fields.select({
+    label,
+    options: itemsOptions,
+    defaultValue: '0'
+  }),
+- // some parsing to convert into number to simplify access in json
+  parse(value: number) {
+    if (value === undefined) {
+      return this.defaultValue;
+    }
+    return `${value}`;
+  },
+  serialize(value: string) {
+    return { value: Number(value) };
+  },
+})
+```
+
+Why bothering using `getCollection` and using `fields.select`?
+Well `fields.relationship` doesn't gives much freedom in control over labels it just displays slug in this case for items it would be just number which isn't helpful. But with this I can create custom label or even filter them out based on field type for e.g I could filter all non-helmet items from Head selector why would you want to wear a Sword on your head? I'm a fun of tools that will be still intuitive one year later just less things to remember and worry about because validation will handle it.
+![[Pasted image 20250217233947.png]]
+As you can see there is a character wearing items like sword, shield, helmet etc.
+I created custom field for that purpose which displays items in similar position as in game and shows how they will look or if they are correct. You can see error more easily.
+![[Pasted image 20250217234353.png]]
+
+```tsx
+import { useId } from "react";
+
+import { Grid, Flex } from "@keystar/ui/layout";
+import { Text } from "@keystar/ui/typography";
+
+import type {
+  ObjectField,
+  GenericPreviewProps,
+  ComponentSchema,
+} from "@keystatic/core";
+import { getCollection } from "astro:content";
+
+const items = await getCollection("items");
+const itemsMap = Object.fromEntries(items.map((item) => [item.id, item]));
+
+const cellSize = 16;
+
+const RenderItem = ({
+  sprite,
+  transform,
+}: {
+  sprite: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  transform: string;
+}) => (
+  <div
+    style={{
+      position: "absolute",
+      width: cellSize * sprite.width,
+      height: cellSize * sprite.height,
+      background: `url(/items.png) ${-sprite.x * cellSize}px ${sprite.y * cellSize}px`,
+      transform,
+    }}
+  />
+);
+
+export function UnitFieldInput<Fields extends Record<string, ComponentSchema>>({
+  schema,
+  fields,
+}: GenericPreviewProps<ObjectField<Fields>, unknown>) {
+  const id = useId();
+
+  const labelId = `${id}-label`;
+  const descriptionId = `${id}-description`;
+  return (
+    <Grid
+      role="group"
+      gap="medium"
+      marginY="xlarge"
+      aria-labelledby={labelId}
+      aria-describedby={schema.description ? descriptionId : undefined}
+    >
+      <Text
+        color="neutralEmphasis"
+        size="medium"
+        weight="semibold"
+        id={labelId}
+      >
+        {schema.label}
+      </Text>
+      <Flex gap="xxlarge">
+        <Grid rowGap="xlarge">
+          {Object.values(fields).map((field) => {
+            const Input = field.schema.Input;
+            return (
+              <Input
+                {...field.schema}
+                onChange={field.onChange}
+                value={field.value}
+              />
+            );
+          })}
+        </Grid>
+
+        <div style={{ padding: 50 }}>
+          <div
+            style={{
+              transformOrigin: "0 0",
+              transform: "scale(4)",
+              imageRendering: "pixelated",
+              position: "relative",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                width: cellSize * 3,
+                height: cellSize * 2,
+                background: `url(/units.png) ${-fields.x.value * cellSize * 3}px ${fields.y.value * cellSize * 2}px`,
+              }}
+            />
+            <RenderItem
+              sprite={itemsMap[fields.head.value].data.sprite}
+              transform={`translate(${cellSize / 2}px, 0px)`}
+            />
+            <RenderItem
+              sprite={itemsMap[fields.chest.value].data.sprite}
+              transform={`translate(${cellSize / 2}px, 0px)`}
+            />
+            <RenderItem
+              sprite={itemsMap[fields.cape.value].data.sprite}
+              transform={`translate(${cellSize / 2}px, 15px)`}
+            />
+            <RenderItem
+              sprite={itemsMap[fields.mainShoulder.value].data.sprite}
+              transform={`translate(37px, 0)`}
+            />
+            <RenderItem
+              sprite={itemsMap[fields.offShoulder.value].data.sprite}
+              transform={`translate(-4px, 0) scaleX(-1)`}
+            />
+            <RenderItem
+              sprite={itemsMap[fields.offhand.value].data.sprite}
+              transform={`translate(-16px, -15px) rotate(-30deg)`}
+            />
+            <RenderItem
+              sprite={itemsMap[fields.mainhand.value].data.sprite}
+              transform={`translate(33px, -37px) rotate(-60deg)`}
+            />
+          </div>
+        </div>
+      </Flex>
+    </Grid>
+  );
+}
+```
+
+I've seen some people creating bindings to use Unity editor for their engine but I wasn't familiar with the topic and I disliked creating custom editor in Unity using Imgui as React Developer I decided to stay with Astro and Keystatic that I used in past for Git-based CMS side project. My knowledge of React helps as well to create it quickly. Setup of astro and keystatic, creating items, units schema and binding it to c++ took one day of my free time. Even more I can use that later to create a Wikipedia(Thanks [Bartosz](https://laniewski.me/) for the idea ✌🏻) for the game!
+
+How looks the output?
+
+![[Pasted image 20250217235919.png]]
+
+Then I can load it anywhere. In my case it will be `nlohmann::json` within C++ project.
+I have unit, I have item ids equipped by that unit. Having item id I can extract item data and sprite.

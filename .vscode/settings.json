@@ -1,0 +1,8 @@
+{
+  "stylelint.validate": [
+    // ↓ Add "html" language.
+    "html",
+    // ↓ Add "astro" language.
+    "astro"
+  ]
+}
