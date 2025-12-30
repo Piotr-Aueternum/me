@@ -1,0 +1,39 @@
+---
+
+---
+
+<div class="sticky top-32 pl-4">
+  <div class="absolute left-[calc(100%+var(--spacing)*8)]">
+    <span>Table of Contents</span>
+    <aside>
+      <nav>
+        <ul id="table-of-contents" class="sticky top-0">
+          <li class="ps-4">
+            <a href="#start">Start</a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </div>
+</div>
+<script defer is:inline>
+  window.addEventListener("DOMContentLoaded", () => {
+    const toc = document.querySelector("#table-of-contents");
+    const df = document.createDocumentFragment();
+    document
+      .querySelectorAll("h2,h3,h4,h5,h6")
+      .values()
+      .filter((el) => el.id)
+      .forEach((el) => {
+        const level = el.tagName.toLowerCase().replaceAll("h", "") ?? 6;
+        const li = document.createElement("li");
+        li.style.paddingInlineStart = `${level}rem`;
+        const a = document.createElement("a");
+        a.textContent = el.textContent;
+        a.href = `#${el.id}`;
+        li.appendChild(a);
+        df.appendChild(li);
+      });
+    toc.appendChild(df);
+  });
+</script>

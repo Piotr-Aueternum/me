@@ -1,14 +1,15 @@
 ---
 title: How to create Git-friendly Resources Database using Astro & Keystatic
-author: piotr-sochacz
 description: >-
   Using Astro@4 and Keystatic as Relational Resources Database for game.
-  Resource is entity with data in form of file. It can be used for audio, images, maps, sprites or items and enemies.
+  Resource is entity with data in form of file. It can be used for audio,
+  images, maps, sprites or items and enemies.
+hero: /public/images/blog/astro/hero.png
+publishDate: 2025-06-15
+author: piotr-sochacz
 categories:
   - gamedev
-publishDate: 2025-06-15
 ---
-
 Using Astro@4 and Keystatic as Relational Resources Database for a game.
 Resource takes a form of a file with data. It can be used for items, NPCs or locations.
 
@@ -38,7 +39,7 @@ func instantiate() -> EnemyUnit:
 	return enemy_instance
 ```
 
-We create a script that extends Resource and then we can declare properties with `@export ` to make them available in more convenient way through editor:
+We create a script that extends Resource and then we can declare properties with `@export` to make them available in more convenient way through editor:
 ![[Pasted image 20250217232724.png]]
 
 It's easy to create multiple files and use them where we need them in unified way.
