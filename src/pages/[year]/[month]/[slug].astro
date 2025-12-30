@@ -1,0 +1,55 @@
+---
+import ArticleAuthor from "components/ArticleAuthor/ArticleAuthor.astro";
+import Layout from "layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  return await getCollection("blog")
+    .then((posts) =>
+      posts.map((post) => ({
+        params: {
+          year: post.data.publishDate.getFullYear().toString(),
+          month: (post.data.publishDate.getMonth() + 1)
+            .toString()
+            .padStart(2, "0"),
+          slug: post.slug,
+        },
+        props: post,
+      }))
+    )
+    .then((paths) =>
+      paths.sort((a, b) => a.params.year.localeCompare(b.params.year))
+    );
+}
+
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={Astro.props.data.title}>
+  <main class="mx-auto w-xl px-4 py-8">
+    <article class="mx-auto">
+      <header>
+        <h1>{Astro.props.data.title}</h1>
+        <ArticleAuthor authorId={Astro.props.data.author} />
+        <p class="text-sm text-gray-500">
+          {
+            Astro.props.data.publishDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })
+          }
+        </p>
+        <p class="text-sm text-gray-500">
+          Category: {Astro.props.data.categories}
+        </p>
+      </header>
+      <section>
+        <p>{Astro.props.data.description}</p>
+        <Content />
+      </section>
+      <footer class="mt-8"></footer>
+    </article>
+  </main>
+</Layout>

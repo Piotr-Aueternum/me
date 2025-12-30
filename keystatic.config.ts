@@ -1,0 +1,73 @@
+// keystatic.config.ts
+import { config, fields, collection } from "@keystatic/core";
+
+export default config({
+  storage: {
+    kind: "local",
+  },
+  collections: {
+    authors: collection({
+      label: "Authors",
+      slugField: "name",
+      path: "src/content/authors/*",
+      schema: {
+        name: fields.slug({ name: { label: "Name" } }),
+        title: fields.text({ label: "Title" }),
+        image: fields.image({
+          label: "Image URL",
+          directory: "public/images/authors",
+          publicPath: "/images/authors",
+          validation: { isRequired: false },
+        }),
+      },
+    }),
+    categories: collection({
+      label: "Categories",
+      slugField: "name",
+      path: "src/content/category/*",
+      schema: {
+        name: fields.slug({ name: { label: "Name" } }),
+      },
+    }),
+    blog: collection({
+      label: "Posts",
+      slugField: "title",
+      path: "src/content/blog/*",
+      format: { contentField: "content" },
+      schema: {
+        title: fields.slug({
+          name: { label: "Title", validation: { isRequired: true } },
+        }),
+        description: fields.text({
+          label: "Description",
+          validation: { isRequired: true },
+        }),
+        publishDate: fields.date({
+          label: "Publish Date",
+          validation: { isRequired: true },
+        }),
+        updatedDate: fields.date({
+          label: "Updated Date",
+        }),
+        author: fields.relationship({
+          label: "Author",
+          collection: "authors",
+        }),
+        categories: fields.multiRelationship({
+          collection: "categories",
+          label: "Category",
+        }),
+        content: fields.markdoc({
+          label: "Content",
+          extension: "md",
+          options: {
+            image: {
+              directory: "public/images/blog",
+              publicPath: "/images/blog",
+            },
+          },
+        }),
+      },
+    }),
+  },
+});

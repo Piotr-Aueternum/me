@@ -40,7 +40,10 @@ const { class: className } = Astro.props;
   };
   const context = canvas.getContext("2d")!;
 
-  const boundaries = new Vector2(window.innerWidth, window.innerHeight);
+  const boundaries = new Vector2(
+    canvas.parentElement?.getBoundingClientRect().width ?? 0,
+    canvas.parentElement?.getBoundingClientRect().height ?? 0,
+  );
   updateCanvasSize(boundaries);
 
   const state = new State(
@@ -63,7 +66,10 @@ const { class: className } = Astro.props;
   ];
 
   function handleResize() {
-    state.boundaries = new Vector2(window.innerWidth, window.innerHeight);
+    state.boundaries = new Vector2(
+      canvas.parentElement?.getBoundingClientRect().width ?? 0,
+      canvas.parentElement?.getBoundingClientRect().height ?? 0,
+    );
     updateCanvasSize(state.boundaries);
   }
   window.addEventListener("resize", handleResize);

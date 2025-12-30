@@ -1,0 +1,25 @@
+---
+import { getEntry } from "astro:content";
+
+interface Props {
+  authorId: string;
+}
+
+const author = await getEntry("authors", Astro.props.authorId);
+if (!author) {
+  throw new Error(`Author with ID ${Astro.props.authorId} not found.`);
+}
+---
+
+<div class="relative mt-8 flex items-center gap-x-4">
+  <img src={author.data.image} alt="" class="size-10 rounded-full bg-gray-50" />
+  <div class="text-sm/6">
+    <p class="font-semibold text-gray-900">
+      <a href="#">
+        <span class="absolute inset-0"></span>
+        {author.data.name}
+      </a>
+    </p>
+    <p class="text-gray-600">{author.data.title}</p>
+  </div>
+</div>
