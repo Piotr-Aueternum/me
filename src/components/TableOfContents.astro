@@ -2,8 +2,31 @@
 
 ---
 
-<div class="sticky top-32 pl-4">
-  <div class="absolute left-[calc(100%+var(--spacing)*8)]">
+<!-- <button id="toggleBtn" commandfor="mypopover" command="toggle-popover">
+  Toggle popover
+</button>
+
+<div popover id="mypopover">
+  <button commandfor="mypopover" command="hide-popover">Hide popover</button>
+</div> -->
+<button
+  id="toggle"
+  commandfor="tocpopover"
+  command="toggle-popover"
+  class="bg-secondary rounded-xs p-1 md:hidden">Table of Contents</button
+>
+<div
+  popover
+  id="tocpopover"
+  class="bg-secondary text-secondary-foreground top-32 h-2/3 w-2/3 p-4 pl-4 md:sticky md:block md:h-full md:w-full md:overflow-visible md:bg-transparent"
+>
+  <button
+    class="bg-accent absolute end-0 top-0 aspect-square w-6 rounded-xs p-1 md:hidden"
+    commandfor="tocpopover"
+    command="hide-popover"
+    title="close">x</button
+  >
+  <div class="absolute md:left-[calc(100%+var(--spacing)*8)]">
     <span>Table of Contents</span>
     <aside>
       <nav>
@@ -27,7 +50,7 @@
       .forEach((el) => {
         const level = el.tagName.toLowerCase().replaceAll("h", "") ?? 6;
         const li = document.createElement("li");
-        li.style.paddingInlineStart = `${level}rem`;
+        li.style.paddingInlineStart = `${level / 2}rem`;
         const a = document.createElement("a");
         a.textContent = el.textContent;
         a.href = `#${el.id}`;
