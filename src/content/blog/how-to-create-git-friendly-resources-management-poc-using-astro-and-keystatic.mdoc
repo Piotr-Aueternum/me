@@ -20,7 +20,7 @@ Proof of concept for resources management in C++ game to maintain relations betw
 
 ### Jargon
 
-What is a Resource? Resource is data container which can refer to other resources and doesn't provide any life cycles methods. It can contain data for specific audio, image, texture, item, items repo or npc. We can also create a reference to other resource within a resource to create more complex data structures.
+What is the Resource? Resource is data container which can refer to other resources and doesn't provide any life cycles methods. It can contain data for specific audio, image, texture, item, items repo or npc. We can also create a reference to other resource within a resource to create more complex data structures.
 
 This concept is more common in gamedev as a [Resource](https://docs.godotengine.org/en/stable/tutorials/scripting/resources.html), [ScriptableObject](https://docs.unity3d.com/6000.3/Documentation/Manual/class-ScriptableObject.html) or [DataAsset](https://dev.epicgames.com/documentation/en-us/unreal-engine/data-assets-in-unreal-engine). If I'd look for similar example in webdev I think it could be Store for e.g [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction#first-create-a-store). We create a file with the store which has initial data and we use it anywhere in application similar to Resources.
 
@@ -28,7 +28,7 @@ This concept is more common in gamedev as a [Resource](https://docs.godotengine.
 
 As I wanted to learn more about [ECS](https://en.wikipedia.org/wiki/Entity_component_system) - similar to databases you have to event create a relationship table for the entities in ECS to have references between the entities such as Player - Equipped - Item.
 
-Project techstack: C++, [entt](https://github.com/skypjack/entt) and [sfml](https://github.com/SFML/SFML). At first it was a bit tough to wrap my head around that but when it clicked it was quite easy to create more and more logic. 
+Project techstack: C++, [entt](https://github.com/skypjack/entt) and [sfml](https://github.com/SFML/SFML). At first it was a bit tough to wrap my head around that but when it clicked it was quite easy to create more and more logic.
 
 At some point it started being problematic to maintain all the data for the game. A lot of files with magic strings as references that are unmaintainable for a human being.
 
@@ -62,7 +62,7 @@ Resources are powerful yet simple data structures. Accessible from both editor u
 
 ### Astro
 
-How can we achieve similar outcome using Astro and Keystatic? For that I'm using Astro collections and Keystatic CMS. First way is native using `collection` schema.
+How can we achieve similar outcome using Astro and Keystatic? For that I'm using Astro collections and Keystatic CMS. First way is native using `fields.relationship` schema.
 
 #### fields.relationship
 
