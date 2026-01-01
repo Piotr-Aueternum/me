@@ -33,7 +33,6 @@ const { Content } = await render(post);
 
 <Layout title={Astro.props.data.title}>
   <main class="mx-auto px-4 py-8 md:w-xl">
-    <TableOfContents />
     <article class="mx-auto">
       <header>
         <div class="flex items-end justify-between py-1">
@@ -42,10 +41,7 @@ const { Content } = await render(post);
           </p>
           <ArticleAuthor authorId={Astro.props.data.author} />
         </div>
-        <h1
-          id="start"
-          class="pt-6 pb-2 text-justify text-5xl font-bold text-pretty"
-        >
+        <h1 class="pt-6 pb-2 text-justify text-5xl font-bold text-pretty">
           {Astro.props.data.title}
         </h1>
         <p class="text-muted-foreground mb-2 text-right text-sm">
@@ -59,6 +55,7 @@ const { Content } = await render(post);
         </p>
         <img src={post.data.hero} loading="lazy" alt="" class="rounded-xl" />
       </header>
+      <TableOfContents />
       <section class="markdoc text-justify text-pretty">
         <MarkdocStyled>
           <Content />

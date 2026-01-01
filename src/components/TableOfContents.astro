@@ -2,23 +2,17 @@
 
 ---
 
-<!-- <button id="toggleBtn" commandfor="mypopover" command="toggle-popover">
-  Toggle popover
-</button>
-
-<div popover id="mypopover">
-  <button commandfor="mypopover" command="hide-popover">Hide popover</button>
-</div> -->
 <button
   id="toggle"
   commandfor="tocpopover"
   command="toggle-popover"
-  class="bg-secondary rounded-xs p-1 md:hidden">Table of Contents</button
+  class="bg-secondary sticky top-4 rounded-xs p-1 md:hidden"
+  >Table of Contents</button
 >
 <div
   popover
   id="tocpopover"
-  class="bg-secondary text-secondary-foreground top-32 h-2/3 w-2/3 p-4 pl-4 md:sticky md:block md:h-full md:w-full md:overflow-visible md:bg-transparent"
+  class="bg-secondary backdrop:bg-secondary text-secondary-foreground h-2/3 w-2/3 p-4 pl-4 backdrop:opacity-50 md:sticky md:top-4 md:block md:h-full md:w-full md:overflow-visible md:bg-transparent"
 >
   <button
     class="bg-accent absolute end-0 top-0 aspect-square w-6 rounded-xs p-1 md:hidden"
@@ -32,13 +26,14 @@
       <nav>
         <ul id="table-of-contents" class="sticky top-0">
           <li class="ps-4">
-            <a href="#start">Start</a>
+            <a href="#">Start</a>
           </li>
         </ul>
       </nav>
     </aside>
   </div>
 </div>
+
 <script defer is:inline>
   window.addEventListener("DOMContentLoaded", () => {
     const toc = document.querySelector("#table-of-contents");
@@ -58,5 +53,11 @@
         df.appendChild(li);
       });
     toc.appendChild(df);
+    toc.addEventListener("click", (el) => {
+      console.log(el);
+      if (el.target.tagName === "A") {
+        document.querySelector("#tocpopover").hidePopover();
+      }
+    });
   });
 </script>
