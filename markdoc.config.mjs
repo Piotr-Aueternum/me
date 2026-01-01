@@ -1,7 +1,13 @@
-import { defineMarkdocConfig } from "@astrojs/markdoc/config";
+import { component, defineMarkdocConfig, nodes } from "@astrojs/markdoc/config";
 import shiki from "@astrojs/markdoc/shiki";
 
 export default defineMarkdocConfig({
+  nodes: {
+    image: {
+      ...nodes.image, // Apply Markdoc's defaults for other options
+      render: component("./src/components/MarkdocImage.astro"),
+    },
+  },
   extends: [
     shiki({
       // Choose from Shiki's built-in themes (or add your own)
