@@ -14,10 +14,9 @@ export default defineMarkdocConfig({
       // Default: 'github-dark'
       // https://shiki.style/themes
       themes: {
-        light: "github-light-default",
-        dark: "github-dark-default",
+        light: "rose-pine-dawn",
+        dark: "vitesse-dark",
       },
-      defaultColor: "light-dark()",
       // Pass custom languages
       // Note: Shiki has countless langs built-in, including `.astro`!
       // https://shiki.style/languages
