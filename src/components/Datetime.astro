@@ -1,0 +1,19 @@
+---
+interface Props {
+  date: Date;
+}
+---
+
+<time
+  datetime={Astro.props.date.toISOString().substring(0, 10)}
+  class="text-muted-foreground font-serif text-sm"
+>
+  <slot name="before" />
+  {
+    Astro.props.date.toLocaleDateString("en-GB", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })
+  }
+</time>
