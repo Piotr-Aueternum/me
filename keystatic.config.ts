@@ -74,5 +74,29 @@ export default config({
         }),
       },
     }),
+    gallery: collection({
+      label: "Gallery",
+      slugField: "title",
+      path: "src/content/gallery/*",
+      schema: {
+        title: fields.slug({
+          name: { label: "Title", validation: { isRequired: true } },
+        }),
+        description: fields.text({
+          label: "Description",
+          validation: { isRequired: true },
+        }),
+        picture: fields.image({
+          label: "Hero image",
+          directory: "public/images/gallery",
+          publicPath: "/public/images/gallery",
+          validation: { isRequired: true },
+        }),
+        publishDate: fields.date({
+          label: "Publish Date",
+          validation: { isRequired: true },
+        }),
+      },
+    }),
   },
 });
