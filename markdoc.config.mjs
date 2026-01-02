@@ -4,8 +4,12 @@ import shiki from "@astrojs/markdoc/shiki";
 export default defineMarkdocConfig({
   nodes: {
     image: {
-      ...nodes.image, // Apply Markdoc's defaults for other options
+      ...nodes.image,
       render: component("./src/components/MarkdocImage.astro"),
+    },
+    link: {
+      ...nodes.link,
+      render: component("./src/components/MarkdocLink.astro"),
     },
   },
   extends: [
