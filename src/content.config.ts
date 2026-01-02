@@ -23,6 +23,17 @@ const blog = defineCollection({
     }),
 });
 
+const gallery = defineCollection({
+  loader: glob({ pattern: "**/*.yaml", base: "src/content/gallery" }),
+  schema: () =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      picture: z.string(),
+      publishDate: z.coerce.date(),
+    }),
+});
+
 const authors = defineCollection({
   loader: glob({ pattern: "**/*.yaml", base: "src/content/authors" }),
   schema: () =>
@@ -33,4 +44,4 @@ const authors = defineCollection({
     }),
 });
 
-export const collections = { blog, authors, categories };
+export const collections = { blog, gallery, authors, categories };
