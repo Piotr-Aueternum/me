@@ -47,7 +47,7 @@ const pictures = (await getCollection("gallery"))
       </section>
       <section>
         <div class="py-24 sm:py-40">
-          <div class="mx-auto flex flex-col gap-y-24 md:w-4xl">
+          <div class="mx-auto flex flex-col gap-y-24 md:w-3xl lg:w-4xl">
             <div class="mx-auto max-w-2xl lg:mx-0">
               <h2 class="font-sans text-4xl font-semibold sm:text-5xl">
                 Posts
@@ -82,7 +82,7 @@ const pictures = (await getCollection("gallery"))
       </section>
       <section class="bg-secondary">
         <div class="py-24 sm:py-40">
-          <div class="mx-auto flex flex-col gap-y-24 md:w-4xl">
+          <div class="mx-auto flex flex-col gap-y-24 md:w-3xl lg:w-4xl">
             <div class="mx-auto lg:mx-0">
               <h2
                 class="text-center font-sans text-4xl font-semibold sm:text-5xl"
@@ -94,19 +94,10 @@ const pictures = (await getCollection("gallery"))
               class="mx-auto flex max-w-2xl grid-cols-2 flex-col gap-2 gap-y-12 lg:mx-0 lg:max-w-none"
             >
               {
-                pictures.map(({ data, id }) => (
+                pictures.map(({ data }) => (
                   <section>
                     <h3 class="text-center font-serif text-3xl font-semibold">
-                      <a
-                        href={`${data.publishDate.getFullYear().toString()}/${data.publishDate.toLocaleDateString(
-                          "en-GB",
-                          {
-                            month: "2-digit",
-                          }
-                        )}/${id}`}
-                      >
-                        {data.title}
-                      </a>
+                      {data.title}
                     </h3>
                     <img
                       src={data.picture}
