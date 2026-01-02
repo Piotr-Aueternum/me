@@ -1,9 +1,7 @@
 ---
 title: Building a Game Resources Manager with Web Tools
-description: >-
-  How I'm using Astro and Keystatic for managing game data
-hero: >-
-  /public/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/hero.png
+description: How I'm using Astro and Keystatic for managing game data
+hero: /public/images/blog/resources-manager-in-astro-keystatic/hero.png
 publishDate: 2025-06-17
 author: piotr-sochacz
 categories:
@@ -26,6 +24,8 @@ A **Resource** is simply a data container that holds game information without li
 
 Game engines like [Godot](https://docs.godotengine.org/en/stable/tutorials/scripting/resources.html), [Unity](https://docs.unity3d.com/6000.3/Documentation/Manual/class-ScriptableObject.html), and [Unreal Engine](https://dev.epicgames.com/documentation/en-us/unreal-engine/data-assets-in-unreal-engine) have first-class Resource types because managing data separately from logic is essential in games.
 
+*In web development, the closest analogy is a state management store like [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction#first-create-a-store) - a single source of truth file with initial data that any part of the application can reference.*
+
 ### Why Web Tools?
 
 My project stack was C++, [entt](https://github.com/skypjack/entt), and [SFML](https://github.com/SFML/SFML). These are lightweight libraries that don't provide built-in resource editors.
@@ -33,7 +33,7 @@ My project stack was C++, [entt](https://github.com/skypjack/entt), and [SFML](h
 I considered two approaches:
 
 1. **Engine bindings** (Godot, Unity): They provide editors out of the box, but require learning new scripting, resource formats, and transformation logic back to C++.
-2. **Web tools**: I already know Astro, Keystatic, and JSON format. Zero learning overhead for new frameworks.
+1. **Web tools**: I already know Astro, Keystatic, and JSON format. Zero learning overhead for new frameworks.
 
 The real decision: which approach requires the least ecosystem commitment and provide most value to progress on learning?
 
@@ -48,7 +48,7 @@ Key advantages:
 
 ## Implementation
 
-To compare approaches, here's how Resources work in Godot:
+To compare approaches, here's how Resources are defined in Godot:
 
 ```gdscript
 # enemy.gd
@@ -95,9 +95,9 @@ export default config({
 The built-in `fields.relationship` works, but it only displays item IDs as labels - not helpful when managing dozens of items. I created a custom component that:
 
 1. Loads all items using `getCollection()`
-2. Creates human-readable labels (item name + slot type)
-3. Validates that items match their slot (no swords as helmets)
-4. Renders items visually on top of the character sprite for instant feedback
+1. Creates human-readable labels (item name + slot type)
+1. Validates that items match their slot (no swords as helmets)
+1. Renders items visually on top of the character sprite for instant feedback
 
 ```typescript
 const items = await getCollection('items');
@@ -129,11 +129,11 @@ This approach gives me control over how options render and allows filtering base
 
 Here's what it looks like when editing a unit in Keystatic:
 
-![Select field in Keystatic with collection of items](/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/Pasted%20image%2020250217233947.png)
+![Select field in Keystatic with collection of items](/images/blog/resources-manager-in-astro-keystatic/select.png)
 
 The key innovation is a custom React component that renders the character sprite with equipped items overlaid on top. This gives instant visual feedback - you can see immediately if items are equipped correctly or if there's a mismatch.
 
-![Collection of items equipped by unit](/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/Pasted%20image%2020250217234353.png)
+![Collection of items equipped by unit](/images/blog/resources-manager-in-astro-keystatic/custom-component.png)
 
 ### Custom Component Implementation
 
@@ -199,14 +199,16 @@ I parse this using `nlohmann::json` in C++. Each item ID maps to item data and s
 
 ## Reflections
 
-What surprised me most was the speed. Setting up Astro, Keystatic, creating schemas, and building a custom component took one day of free time. 
+What surprised me most was the speed. Setting up Astro, Keystatic, creating schemas, and building a custom component took one day of free time.
 
 If I'd tried to bind to Godot or build custom editor tooling, I'd still be working on it weeks later. Instead, I leveraged:
+
 - My existing knowledge of React and TypeScript
 - Keystatic's schema system for instant validation and visual feedback
 - Astro's collection system for type-safe data
 
 Beyond this game project, that same Keystatic instance could become:
+
 - An asset management interface
 - A tool for non-technical team members to manage game content
 - A wiki for community (Thanks [Bartosz](https://laniewski.me/) for that idea)
