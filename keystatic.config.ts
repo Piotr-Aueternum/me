@@ -15,7 +15,7 @@ export default config({
         image: fields.image({
           label: "Image URL",
           directory: "public/images/authors",
-          publicPath: "/public/images/authors",
+          publicPath: "/images/authors",
           validation: { isRequired: false },
         }),
       },
@@ -44,7 +44,7 @@ export default config({
         hero: fields.image({
           label: "Hero image",
           directory: "public/images/blog",
-          publicPath: "/public/images/blog",
+          publicPath: "/images/blog",
           validation: { isRequired: true },
         }),
         publishDate: fields.date({
@@ -89,7 +89,7 @@ export default config({
         picture: fields.image({
           label: "Hero image",
           directory: "public/images/gallery",
-          publicPath: "/public/images/gallery",
+          publicPath: "/images/gallery",
           validation: { isRequired: true },
         }),
         publishDate: fields.date({
