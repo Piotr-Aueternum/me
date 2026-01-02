@@ -64,6 +64,7 @@ const posts = (await getCollection("blog"))
                     </a>
                   </h3>
                   <Datetime date={data.publishDate} />
+                  <p class="mt-1 font-serif">{data.description}</p>
                 </section>
               ))
             }
