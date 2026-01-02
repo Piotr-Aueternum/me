@@ -1,0 +1,19 @@
+---
+interface Props {
+  href: string;
+  title: string;
+}
+const { href, title } = Astro.props;
+---
+
+{
+  href.startsWith("/") ? (
+    <a href={href} title={title}>
+      <slot />
+    </a>
+  ) : (
+    <a href={href} title={title} target="_blank" referrerpolicy="no-referrer">
+      <slot />
+    </a>
+  )
+}
