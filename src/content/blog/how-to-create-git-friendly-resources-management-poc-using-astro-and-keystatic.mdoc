@@ -100,7 +100,9 @@ Utility function:
 const items = await getCollection('items');
 
 const itemsOptions = items.map(item => ({
-  label: item.id === '0' ? 'None' : `${item.data.name}@${item.data.slot}`,
+  label: item.id !== '0'
+    ? `${item.data.name}@${item.data.slot}`
+    : 'None',
   value: item.id
 }));
 

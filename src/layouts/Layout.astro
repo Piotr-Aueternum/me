@@ -1,5 +1,4 @@
 ---
-import ThemeToggle from "components/ThemeToggle.tsx";
 import "styles/global.css";
 interface Props {
   title: string;
@@ -11,15 +10,6 @@ const { title } = Astro.props;
 <!doctype html>
 <html lang="en">
   <head>
-    <script is:inline>
-      // critical script to avoid flickering of dark mode
-      document.documentElement.classList.toggle(
-        "dark",
-        localStorage.theme === "dark" ||
-          (!("theme" in localStorage) &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches)
-      );
-    </script>
     <style is:global>
       @import url("https://fonts.googleapis.com/css2?family=Dosis&family=Hepta+Slab:wght@300&display=swap");
     </style>
@@ -44,7 +34,6 @@ const { title } = Astro.props;
   </head>
 
   <body>
-    <ThemeToggle client:only />
     <slot />
   </body>
 
