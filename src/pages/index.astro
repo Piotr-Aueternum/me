@@ -2,8 +2,8 @@
 import Dust from "components/Dust/Dust.astro";
 import Layout from "layouts/Layout.astro";
 import SocialMedia from "components/SocialMedia.astro";
-import PreviewArticle from "components/PreviewArticle.astro";
 import { getCollection } from "astro:content";
+import Datetime from "components/Datetime.astro";
 
 const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
@@ -13,7 +13,7 @@ const posts = (await getCollection("blog"))
 
 <Layout title="Piotr Sochacz - Software Engineer">
   <main>
-    <section class="intro relative flex h-[80dvh] w-full justify-center">
+    <section class="relative flex h-[80dvh] w-full justify-center">
       <img
         class="absolute top-0 left-0 z-10 h-[80dvh] w-full object-cover object-[80%] md:object-right"
         src="/intro.webp"
@@ -34,38 +34,37 @@ const posts = (await getCollection("blog"))
       <Dust class="absolute top-0 left-0 z-20" />
     </section>
     <section>
-      <div class="py-24 sm:py-32">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+      <div class="py-24 sm:py-40">
+        <div class="mx-auto flex flex-col gap-y-24 md:w-4xl">
           <div
             class="mx-auto flex max-w-2xl flex-col items-center justify-center lg:mx-0"
           >
             <h2
-              class="border-accent-foreground scroll-m-20 border-b pb-2 font-sans text-4xl font-semibold text-pretty first:mt-0 sm:text-5xl"
+              class="font-sans text-4xl font-semibold text-pretty sm:text-5xl"
             >
               Blog
             </h2>
           </div>
           <div
-            class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+            class="mx-auto flex max-w-2xl flex-col gap-y-12 lg:mx-0 lg:max-w-none"
           >
             {
               posts.map(({ data, id }) => (
-                <PreviewArticle
-                  authorId={data.author}
-                  slug={id}
-                  title={data.title}
-                  description={data.description}
-                  categories={data.categories}
-                  year={data.publishDate.getFullYear().toString()}
-                  month={data.publishDate.toLocaleDateString("en-US", {
-                    month: "2-digit",
-                  })}
-                  publishDate={data.publishDate.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                />
+                <section>
+                  <h3 class="text-justify text-2xl font-semibold text-pretty">
+                    <a
+                      href={`${data.publishDate.getFullYear().toString()}/${data.publishDate.toLocaleDateString(
+                        "en-GB",
+                        {
+                          month: "2-digit",
+                        }
+                      )}/${id}`}
+                    >
+                      {data.title}
+                    </a>
+                  </h3>
+                  <Datetime date={data.publishDate} />
+                </section>
               ))
             }
           </div>
@@ -74,18 +73,3 @@ const posts = (await getCollection("blog"))
     </section>
   </main>
 </Layout>
-
-<style>
-  .intro:after {
-    pointer-events: none;
-    content: "";
-    background-image: url(/noise.png);
-    height: 300%;
-    left: -50%;
-    opacity: 0.015;
-    position: fixed;
-    z-index: 10;
-    top: -100%;
-    width: 300%;
-  }
-</style>
