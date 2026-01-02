@@ -6,21 +6,24 @@
   id="toggle"
   commandfor="tocpopover"
   command="toggle-popover"
-  class="bg-popover sticky top-4 rounded-xs p-1 md:hidden"
+  class="bg-popover sticky top-4 rounded-xs p-1 lg:hidden"
   >Table of Contents</button
 >
+
 <div
   popover
   id="tocpopover"
-  class="bg-popover backdrop:bg-popover text-popover-foreground h-2/3 w-2/3 pl-4 backdrop:opacity-50 max-md:p-4 md:sticky md:top-4 md:block md:h-full md:w-full md:overflow-visible md:bg-transparent"
+  class="bg-popover backdrop:bg-popover text-popover-foreground h-2/3 w-2/3 pl-4 backdrop:opacity-50 max-lg:p-4 lg:sticky lg:top-4 lg:block lg:h-full lg:w-full lg:overflow-visible lg:bg-transparent"
 >
   <button
-    class="bg-accent absolute end-0 top-0 aspect-square w-6 rounded-xs p-1 md:hidden"
+    class="bg-accent absolute end-0 top-0 aspect-square w-6 rounded-xs p-1 lg:hidden"
     commandfor="tocpopover"
     command="hide-popover"
     title="close">x</button
   >
-  <div class="absolute md:left-[calc(100%+var(--spacing)*8)]">
+  <div
+    class="absolute p-4 lg:left-full lg:w-[calc((100dvw-var(--container-2xl))/2)]"
+  >
     <span>Table of Contents</span>
     <aside>
       <nav>
