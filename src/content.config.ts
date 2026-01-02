@@ -40,6 +40,7 @@ const authors = defineCollection({
     z.object({
       name: z.string(),
       title: z.string().optional(),
+      email: z.string().email(),
       image: z.string().optional(),
     }),
 });

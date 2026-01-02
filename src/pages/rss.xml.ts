@@ -7,6 +7,7 @@ export const GET: APIRoute = async (context) => {
     .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
     .filter(({ data }) => data.publishDate.valueOf() <= new Date().valueOf())
     .slice(0, 2);
+
   return rss({
     // `<title>` field in output xml
     title: "Piotr Sochacz - Software Developer",
@@ -29,13 +30,7 @@ export const GET: APIRoute = async (context) => {
         title: post.data.title,
         description: post.data.description,
         pubDate: post.data.publishDate,
-        author: (await getEntry("authors", post.data.author))!.data.name,
-        categories: await Promise.all(
-          post.data.categories.map(
-            async (category) =>
-              (await getEntry("categories", category.id))!.data.name,
-          ),
-        ),
+        author: (await getEntry("authors", post.data.author))!.data.email,
       })),
     ),
     // (optional) inject custom xml

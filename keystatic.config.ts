@@ -11,6 +11,10 @@ export default config({
       path: "src/content/authors/*",
       schema: {
         name: fields.slug({ name: { label: "Name" } }),
+        email: fields.text({
+          label: "Email",
+          validation: { isRequired: true },
+        }),
         title: fields.text({ label: "Title" }),
         image: fields.image({
           label: "Image URL",

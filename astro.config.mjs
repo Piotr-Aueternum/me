@@ -8,6 +8,7 @@ import keystatic from "@keystatic/astro";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://piotr-sochacz.design",
   vite: {
     plugins: [tailwindcss()],
   },
