@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 import react from "@astrojs/react";
 import markdoc from "@astrojs/markdoc";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,5 +15,5 @@ export default defineConfig({
   build: {
     format: "file",
   },
-  integrations: [react(), markdoc()],
+  integrations: [react(), markdoc(), sitemap()],
 });

@@ -17,7 +17,12 @@ const { title } = Astro.props;
   content="Piotr Sochacz - Professional Software Developer & Hobbyst Artist"
 />
 <meta name="viewport" content="width=device-width" />
-<link rel="icon" type="image/svg+xml" href="/favicon.png" />
+<link rel="icon" type="image/svg+xml" href="/favicon.png" /><link
+  rel="alternate"
+  type="application/rss+xml"
+  title="Piotr Sochacz - Professional Software Developer & Hobbyst Artist"
+  href={new URL("rss.xml", Astro.site)}
+/>
 <meta name="generator" content={Astro.generator} />
 <meta
   name="viewport"
