@@ -2,18 +2,21 @@
 
 ---
 
-<button
-  id="toggle"
-  commandfor="tocpopover"
-  command="toggle-popover"
-  class="bg-popover sticky top-4 rounded-xs p-1 lg:hidden"
-  >Table of Contents</button
->
+<div class="sticky top-4 flex justify-end">
+  <button
+    id="toggle"
+    commandfor="tocpopover"
+    command="toggle-popover"
+    class="bg-popover rounded-xs p-2 lg:hidden"
+  >
+    Table of Contents
+  </button>
+</div>
 
 <div
   popover
   id="tocpopover"
-  class="bg-popover backdrop:bg-popover text-popover-foreground h-2/3 w-2/3 pl-4 backdrop:opacity-50 max-lg:p-4 lg:sticky lg:top-4 lg:block lg:h-full lg:w-full lg:overflow-visible lg:bg-transparent"
+  class="bg-popover backdrop:bg-popover text-popover-foreground h-3/4 w-2/3 pl-4 backdrop:opacity-50 max-lg:p-4 lg:sticky lg:top-4 lg:block lg:h-full lg:w-full lg:overflow-visible lg:bg-transparent"
 >
   <button
     class="bg-accent absolute end-0 top-0 aspect-square w-6 rounded-xs p-1 lg:hidden"
