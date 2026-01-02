@@ -50,7 +50,7 @@ const posts = (await getCollection("blog"))
           >
             {
               posts.map(({ data, id }) => (
-                <section>
+                <section class="p-4">
                   <h3 class="text-justify text-2xl font-semibold text-pretty">
                     <a
                       href={`${data.publishDate.getFullYear().toString()}/${data.publishDate.toLocaleDateString(
