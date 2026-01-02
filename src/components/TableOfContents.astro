@@ -24,10 +24,10 @@
   <div
     class="absolute p-4 lg:left-full lg:w-[calc((100dvw-var(--container-2xl))/2)]"
   >
-    <span>Table of Contents</span>
+    <span class="font-serif">Table of Contents</span>
     <aside>
       <nav>
-        <ul id="table-of-contents" class="sticky top-0">
+        <ul id="table-of-contents" class="table-of-contents sticky top-0">
           <li class="ps-4">
             <a href="#">Start</a>
           </li>
@@ -36,6 +36,15 @@
     </aside>
   </div>
 </div>
+
+<style scoped>
+  .table-of-contents {
+    li::before {
+      content: "-";
+      margin: 0 0.25rem;
+    }
+  }
+</style>
 
 <script defer is:inline>
   window.addEventListener("DOMContentLoaded", () => {

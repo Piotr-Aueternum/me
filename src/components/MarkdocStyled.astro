@@ -2,7 +2,7 @@
 
 ---
 
-<div class="markdoc text-justify text-pretty">
+<div class="markdoc text-pretty">
   <slot />
 </div>
 <style is:inline scoped>
@@ -25,16 +25,24 @@
       margin-block-end: calc(var(--spacing) * 1);
     }
     pre {
-      padding: calc(var(--spacing) * 4);
+      padding-inline: calc(var(--spacing) * 1.5);
+      padding-block: calc(var(--spacing) * 4);
     }
     img {
       margin: 0 auto;
     }
+    p {
+      font-size: var(--text-lg);
+      text-align: justify;
+      margin-block: calc(var(--spacing) * 2);
+    }
     @media (min-width: 40rem) {
       pre,
       p {
-        margin-block: calc(var(--spacing) * 2);
         margin-inline: calc(var(--spacing) * 4);
+      }
+      p {
+        font-size: var(--text-lg);
       }
     }
     h1,
@@ -46,6 +54,7 @@
       color: var(--color-foreground);
       --tw-font-weight: var(--font-weight-bold);
       font-weight: var(--font-weight-bold);
+      font-family: var(--font-serif);
     }
     h2 {
       font-size: var(--text-5xl);
