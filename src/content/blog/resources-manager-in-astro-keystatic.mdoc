@@ -1,7 +1,7 @@
 ---
-title: Resources Manager in Astro & Keystatic
+title: Building a Game Resources Manager with Web Tools
 description: >-
-  How webdev experience can help with gamedev
+  How I'm using Astro and Keystatic for managing game data
 hero: >-
   /public/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/hero.png
 publishDate: 2025-06-17
@@ -12,44 +12,43 @@ categories:
   - webdev
   - git
 ---
-## Intro
+## The Challenge
 
-This post will explain how webdev experience can be helpful in gamedev. We will implement proof of concept for resources management in C++ game to maintain relations between items, npc or abilities.
-### Jargon
+When building a game, managing data (items, NPCs, abilities, and their relationships) across JSON configuration files requires keeping track of IDs and validating their connections. Without a centralised tool, IDs drift between files, relationships break silently, and iteration becomes error-prone.
 
-**What is a Resource?**
+The real problem: choosing which editor binding requires the least effort to integrate with your existing workflow.
 
-A Resource is a serializable data container in Godot (and similar engines) that:
-- Stores game data without lifecycle methods (pure data, no `_ready()` or `_process()`)
-- Can reference other Resources to build complex hierarchical data structures
-- Holds any asset type: audio files, images, textures, sprites, item definitions, NPC data, abilities, etc.
-- Can be edited both in the editor UI and as raw text files
+Instead of picking a particular solution, I decided to use tools I already knew well: Astro and Keystatic. This case study walks through why and what I built in a single day.
 
+### What is a Resource?
 
-This concept is common in game engines:
-- **Godot**: [Resource](https://docs.godotengine.org/en/stable/tutorials/scripting/resources.html)
-- **Unity**: [ScriptableObject](https://docs.unity3d.com/6000.3/Documentation/Manual/class-ScriptableObject.html)
-- **Unreal Engine**: [DataAsset](https://dev.epicgames.com/documentation/en-us/unreal-engine/data-assets-in-unreal-engine)
+A **Resource** is simply a data container that holds game information without lifecycle methods. It contains item definitions, NPC stats, ability data, or any serialisable game information. The key is that it's pure data: no behaviour, just structure.
 
-In web development, the closest analogy is a state management store like [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction#first-create-a-store) - a single source of truth file with initial data that any part of the application can reference.
+Game engines like [Godot](https://docs.godotengine.org/en/stable/tutorials/scripting/resources.html), [Unity](https://docs.unity3d.com/6000.3/Documentation/Manual/class-ScriptableObject.html), and [Unreal Engine](https://dev.epicgames.com/documentation/en-us/unreal-engine/data-assets-in-unreal-engine) have first-class Resource types because managing data separately from logic is essential in games.
 
-### Motivation
+### Why Web Tools?
 
-As I wanted to learn more about [ECS](https://en.wikipedia.org/wiki/Entity_component_system) - similar to databases you have to event create a relationship table for the entities in ECS to have references between the entities such as Player - Equipped - Item.
+My project stack was C++, [entt](https://github.com/skypjack/entt), and [SFML](https://github.com/SFML/SFML). These are lightweight libraries that don't provide built-in resource editors.
 
-Project techstack: C++, [entt](https://github.com/skypjack/entt) and [sfml](https://github.com/SFML/SFML). At first it was a bit tough to wrap my head around that but when it clicked it was quite easy to create more and more logic.
+I considered two approaches:
 
-At some point it started being problematic to maintain all the data for the game. A lot of files with magic strings as references that are unmaintainable for a human being.
+1. **Engine bindings** (Godot, Unity): They provide editors out of the box, but require learning new scripting, resource formats, and transformation logic back to C++.
+2. **Web tools**: I already know Astro, Keystatic, and JSON format. Zero learning overhead for new frameworks.
 
-To solve that I created PoC using tools I know. It helped to reduce fatigue of maintaining proper ids between more complex resources.
+The real decision: which approach requires the least ecosystem commitment and provide most value to progress on learning?
+
+I already work with JSON format daily and know React and TypeScript. Instead of learning a new engine's ecosystem (Godot, Unity, Bevy, etc.), I leveraged what I already had: web development tools.
+
+Key advantages:
+
+- **Ecosystem commitment**: Zero. I'm using tools I work with every day
+- **Focus**: When learning C++ and ECS patterns, using familiar tools means I focus on one thing at a time. Not simultaneously learning C++, ECS, and a new engine's resource system
+- **Format alignment**: JSON is my native format anyway; no additional conversion logic needed between editor and game code
+- **Reusability**: Beyond this game, the same system becomes documentation, a wiki, or asset management
 
 ## Implementation
 
-In gdscript it's clean and straightforward as Resource is first-class citizen in the engine. On top of that the gdscript is a custom langauge for the Godot with a python-like syntax.
-
-### Godot
-
-Code:
+To compare approaches, here's how Resources work in Godot:
 
 ```gdscript
 # enemy.gd
@@ -63,19 +62,13 @@ class_name Enemy
 @export var experience: int = 0
 ```
 
-Editor preview:
+This is clean and straightforward because Resource is a first-class citizen in Godot. For C++, I needed to replicate this workflow using web tools.
 
-![Preview of exported fields from code example](/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/Pasted%20image%2020250217232724.png)
+### Astro & Keystatic Approach
 
-Resources are powerful yet simple data structures. Accessible from both editor ui and text editors(for advanced developers).
+I chose Astro with Keystatic for two key reasons: it integrates Astro collections with a clean UI for editing, and I can create custom React components for field validation. Here's the basic setup:
 
-### Astro
-
-How can we achieve similar outcome using Astro and Keystatic? For that I'm using Astro collections and Keystatic CMS. First way is native using `fields.relationship` schema.
-
-#### fields.relationship
-
-We need to define collection in keystatic:
+#### Schema Definition
 
 ```typescript
 export default config({
@@ -97,13 +90,14 @@ export default config({
 });
 ```
 
-#### astro:content
+#### Custom Validation Component
 
-*The other one is "hacky" which is deprecated in latest versions of Astro it works only at version 4 as Keystatic is considered "client" instead of "server" and we can't access astro:content anymore inside keystatic.config.ts. I read that it can be achieved through API but I haven't check that yet.*
+The built-in `fields.relationship` works, but it only displays item IDs as labels - not helpful when managing dozens of items. I created a custom component that:
 
-Coming back to second option. For that case I'm using `import { getCollection } from 'astro:content';` and `mode: hybrid` in astro.config.mjs file along with adapter.
-
-Utility function:
+1. Loads all items using `getCollection()`
+2. Creates human-readable labels (item name + slot type)
+3. Validates that items match their slot (no swords as helmets)
+4. Renders items visually on top of the character sprite for instant feedback
 
 ```typescript
 const items = await getCollection('items');
@@ -127,20 +121,22 @@ const selectItems = ({label}: {label: string}) => ({
 });
 ```
 
-Why bothering using `getCollection` and using `fields.select`? If you want to have more control over render of options. You can use that approach lets say that items are stored using ids or we want to filter them based on other data like which slot it is equipped in? For that matter we can write this extra logic to make sure that this unit won't wear sword as a helmet.
+This approach gives me control over how options render and allows filtering based on game logic - e.g., only showing helmets for the "Head" slot.
 
-Well `fields.relationship` doesn't gives much freedom in control over labels it just displays slug in this case for items it would be just number or string which isn't helpful. But with this I can create custom label or even filter them out based on field type for e.g I could filter all non-helmet items from Head selector why would you want to wear a Sword on your head? I'm a fan of tools that will be still intuitive one year later just less things to remember and worry about because validation will handle it.
+## What I Built
 
-## Result
+### Visual Validation in Keystatic
 
-Dropdown with items selection:
+Here's what it looks like when editing a unit in Keystatic:
+
 ![Select field in Keystatic with collection of items](/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/Pasted%20image%2020250217233947.png)
 
-As you can see there is a character wearing items like sword, shield, helmet etc. I created custom field for that purpose which displays items in similar position as in game and shows how they will look or if they are correct. You can see error more easily.
+The key innovation is a custom React component that renders the character sprite with equipped items overlaid on top. This gives instant visual feedback - you can see immediately if items are equipped correctly or if there's a mismatch.
 
 ![Collection of items equipped by unit](/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/Pasted%20image%2020250217234353.png)
 
-Custome component that displays items on top of character within Keystatic.
+### Custom Component Implementation
+
 ```tsx
 import { getCollection } from "astro:content";
 
@@ -175,11 +171,12 @@ const UnitFieldInput = ({ schema, fields }) => {
 };
 ```
 
-I've seen some people creating bindings to use Unity editor for their engine but I wasn't familiar with the topic and I disliked creating custom editor in Unity using Imgui. As a Frontend Developer I decided to stay with Astro and Keystatic that I used in past for Git-based CMS side projects. In future I could consider creating bindings in Godot as it is flexible tool with pleasant format for custom plugins in editor. My knowledge of React helps as well to create it quickly. Setup of astro and keystatic, creating items, units schema and binding it to C++ took one day of my free time. Even more I can use that later to create a Wikipedia(Thanks [Bartosz](https://laniewski.me/) for that idea ✌🏻).
+This component fetches item data and renders them directly on the character. Everything needed for creating new game content is there in one place.
 
-### Output
+### Generated Output
 
-Keystatic will produce following json file for each entity:
+Keystatic outputs clean JSON files that C++ can consume directly:
+
 ```json
 // src/content/units/0.json
 {
@@ -198,9 +195,29 @@ Keystatic will produce following json file for each entity:
 }
 ```
 
-Then I can load it anywhere. In my case it will be `nlohmann::json` within C++ project. I have unit, I have item ids equipped by that unit. Having item id I can extract item data and sprite for the renderer.
+I parse this using `nlohmann::json` in C++. Each item ID maps to item data and sprite coordinates in the renderer.
 
-## Materials
+## Reflections
+
+What surprised me most was the speed. Setting up Astro, Keystatic, creating schemas, and building a custom component took one day of free time. 
+
+If I'd tried to bind to Godot or build custom editor tooling, I'd still be working on it weeks later. Instead, I leveraged:
+- My existing knowledge of React and TypeScript
+- Keystatic's schema system for instant validation and visual feedback
+- Astro's collection system for type-safe data
+
+Beyond this game project, that same Keystatic instance could become:
+- An asset management interface
+- A tool for non-technical team members to manage game content
+- A wiki for community (Thanks [Bartosz](https://laniewski.me/) for that idea)
+
+This is the real win: using web tools doesn't lock you into one use case. A weekend proof of concept today could become your team's centralised content hub tomorrow.
+
+## More to learn
+
+See the [full code example](https://github.com/Erzis900/SFML-EnTT) for the complete implementation.
+
+### Additional materials
 
 Unity - [Game architecture with ScriptableObject](https://www.youtube.com/watch?v=raQ3iHhE_Kk) (1h)
 
