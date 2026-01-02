@@ -1,9 +1,7 @@
 ---
-title: How to create Resources Manager in Astro & Keystatic for C++ game
+title: Resources Manager in Astro & Keystatic
 description: >-
-  Using Astro@4 and Keystatic as Relational Resources Database for game.
-  Resource is entity with data in form of file. It can be used for audio,
-  images, maps, sprites or items and enemies.
+  How webdev experience can help with gamedev
 hero: >-
   /public/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/hero.png
 publishDate: 2025-06-17
@@ -16,11 +14,27 @@ categories:
 ---
 ## Intro
 
-Proof of concept for resources management in C++ game to maintain relations between items, npc or abilities.
-
+This post will explain how webdev experience can be helpful in gamedev. We will implement proof of concept for resources management in C++ game to maintain relations between items, npc or abilities.
 ### Jargon
 
-What is the Resource? Resource is data container which can refer to other resources and doesn't provide any life cycles methods. It can contain data for specific audio, image, texture, item, items repo or npc. We can also create a reference to other resource within a resource to create more complex data structures.
+**What is a Resource?**
+
+A Resource is a serializable data container in Godot (and similar engines) that:
+- Stores game data without lifecycle methods (pure data, no `_ready()` or `_process()`)
+- Can reference other Resources to build complex hierarchical data structures
+- Holds any asset type: audio files, images, textures, sprites, item definitions, NPC data, abilities, etc.
+- Can be edited both in the editor UI and as raw text files
+
+
+This concept is common in game engines:
+- **Godot**: [Resource](https://docs.godotengine.org/en/stable/tutorials/scripting/resources.html)
+- **Unity**: [ScriptableObject](https://docs.unity3d.com/6000.3/Documentation/Manual/class-ScriptableObject.html)
+- **Unreal Engine**: [DataAsset](https://dev.epicgames.com/documentation/en-us/unreal-engine/data-assets-in-unreal-engine)
+
+In web development, the closest analogy is a state management store like [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction#first-create-a-store) - a single source of truth file with initial data that any part of the application can reference.
+### Jargon
+
+What is a Resource? Resource is data container which can refer to other resources and doesn't provide any life cycles methods. It can contain data for specific audio, image, texture, item, items repo or npc. We can also create a reference to other resource within a resource to create more complex data structures.
 
 This concept is more common in gamedev as a [Resource](https://docs.godotengine.org/en/stable/tutorials/scripting/resources.html), [ScriptableObject](https://docs.unity3d.com/6000.3/Documentation/Manual/class-ScriptableObject.html) or [DataAsset](https://dev.epicgames.com/documentation/en-us/unreal-engine/data-assets-in-unreal-engine). If I'd look for similar example in webdev I think it could be Store for e.g [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction#first-create-a-store). We create a file with the store which has initial data and we use it anywhere in application similar to Resources.
 
@@ -124,12 +138,14 @@ Well `fields.relationship` doesn't gives much freedom in control over labels it 
 
 ## Result
 
+Dropdown with items selection:
 ![Select field in Keystatic with collection of items](/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/Pasted%20image%2020250217233947.png)
 
 As you can see there is a character wearing items like sword, shield, helmet etc. I created custom field for that purpose which displays items in similar position as in game and shows how they will look or if they are correct. You can see error more easily.
 
 ![Collection of items equipped by unit](/images/blog/how-to-create-git-friendly-resources-management-poc-using-astro-and-keystatic/Pasted%20image%2020250217234353.png)
 
+Custome component that displays items on top of character within Keystatic.
 ```tsx
 import { getCollection } from "astro:content";
 
@@ -168,6 +184,7 @@ I've seen some people creating bindings to use Unity editor for their engine but
 
 ### Output
 
+Keystatic will produce following json file for each entity:
 ```json
 // src/content/units/0.json
 {
