@@ -1,10 +1,10 @@
 ---
-import Layout from "layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import TableOfContents from "components/TableOfContents.astro";
 import MarkdocStyled from "components/MarkdocStyled.astro";
 import Datetime from "components/Datetime.astro";
+import CommonHead from "components/CommonHead.astro";
 
 export async function getStaticPaths() {
   return await getCollection("blog")
@@ -30,39 +30,51 @@ const post = Astro.props;
 const { Content } = await render(post);
 ---
 
-<Layout title={Astro.props.data.title}>
-  <div class="mx-auto px-4 py-8 sm:w-lg lg:w-2xl">
-    <header><a href="/" class="text-2xl underline">Home</a></header>
-    <main>
-      <article class="mx-auto py-4">
-        <header class="my-2">
-          <h1 class="pt-6 pb-2 font-serif text-5xl font-bold text-pretty">
-            {Astro.props.data.title}
-          </h1>
-          <div class="my-3 flex">
-            {
-              Astro.props.data.updatedDate && (
-                <Datetime date={Astro.props.data.updatedDate}>
-                  <Fragment slot="before">Updated:</Fragment>
-                </Datetime>
-              )
-            }
-            <Datetime
-              date={Astro.props.data.publishDate}
-              class="grow text-right"
-            >
-              <Fragment slot="before">Published:</Fragment>
-            </Datetime>
-          </div>
-          <img src={post.data.hero} loading="lazy" alt="" class="rounded-xl" />
-        </header>
-        <TableOfContents />
-        <section>
-          <MarkdocStyled>
-            <Content />
-          </MarkdocStyled>
-        </section>
-      </article>
-    </main>
-  </div>
-</Layout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <CommonHead title={Astro.props.data.title} />
+  </head>
+
+  <body>
+    <div class="mx-auto px-4 py-8 sm:w-lg lg:w-2xl">
+      <header><a href="/" class="text-2xl underline">Home</a></header>
+      <main>
+        <article class="mx-auto py-4">
+          <header class="my-2">
+            <h1 class="pt-6 pb-2 font-serif text-5xl font-bold text-pretty">
+              {Astro.props.data.title}
+            </h1>
+            <div class="my-3 flex">
+              {
+                Astro.props.data.updatedDate && (
+                  <Datetime date={Astro.props.data.updatedDate}>
+                    <Fragment slot="before">Updated:</Fragment>
+                  </Datetime>
+                )
+              }
+              <Datetime
+                date={Astro.props.data.publishDate}
+                class="grow text-right"
+              >
+                <Fragment slot="before">Published:</Fragment>
+              </Datetime>
+            </div>
+            <img
+              src={post.data.hero}
+              loading="lazy"
+              alt=""
+              class="rounded-xl"
+            />
+          </header>
+          <TableOfContents />
+          <section>
+            <MarkdocStyled>
+              <Content />
+            </MarkdocStyled>
+          </section>
+        </article>
+      </main>
+    </div>
+  </body>
+</html>
