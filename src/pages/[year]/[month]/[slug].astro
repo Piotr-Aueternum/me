@@ -39,12 +39,7 @@ const { Content } = await render(post);
           <h1 class="pt-6 pb-2 text-justify text-5xl font-bold text-pretty">
             {Astro.props.data.title}
           </h1>
-          <div class="my-3">
-            <p class="text-muted-foreground mb-2 text-right text-sm">
-              <Datetime date={Astro.props.data.publishDate}>
-                <Fragment slot="before">Published:</Fragment>
-              </Datetime>
-            </p>
+          <div class="my-3 flex">
             {
               Astro.props.data.updatedDate && (
                 <Datetime date={Astro.props.data.updatedDate}>
@@ -52,6 +47,12 @@ const { Content } = await render(post);
                 </Datetime>
               )
             }
+            <Datetime
+              date={Astro.props.data.publishDate}
+              class="grow text-right"
+            >
+              <Fragment slot="before">Published:</Fragment>
+            </Datetime>
           </div>
           <img src={post.data.hero} loading="lazy" alt="" class="rounded-xl" />
         </header>

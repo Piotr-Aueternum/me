@@ -1,12 +1,13 @@
 ---
 interface Props {
   date: Date;
+  class?: string;
 }
 ---
 
 <time
   datetime={Astro.props.date.toISOString().substring(0, 10)}
-  class="text-muted-foreground font-serif text-sm"
+  class:list={["text-muted-foreground font-serif text-sm", Astro.props.class]}
 >
   <slot name="before" />
   {
