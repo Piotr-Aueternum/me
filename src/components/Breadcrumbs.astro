@@ -1,0 +1,33 @@
+---
+
+---
+
+<ul
+  id="breadcrumbs-container"
+  class="breadcrumbs-container flex text-xl [&_a]:underline"
+>
+</ul>
+<style scoped>
+  .breadcrumbs-container {
+    li:not(:first-child)::before {
+      content: "/";
+      margin: 0 0.25rem;
+    }
+  }
+</style>
+
+<script defer is:inline>
+  window.addEventListener("DOMContentLoaded", () => {
+    const container = document.querySelector("#breadcrumbs-container");
+    const df = document.createDocumentFragment();
+    globalThis.location.pathname.split("/").forEach((el, idx, arr) => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.textContent = el === "" ? "Home" : el[0].toUpperCase() + el.slice(1);
+      a.href = `${arr.slice(0, idx).join("/")}/${el}`;
+      li.appendChild(a);
+      df.appendChild(li);
+    });
+    container.appendChild(df);
+  });
+</script>

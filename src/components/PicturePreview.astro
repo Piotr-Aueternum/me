@@ -1,0 +1,18 @@
+---
+import Datetime from "components/Datetime.astro";
+import { galleryLinks } from "lib/utils";
+import type { CollectionEntry } from "astro:content";
+
+type Props = CollectionEntry<"gallery">["data"] & { slug: string };
+const { slug, description, picture, publishDate, title } = Astro.props;
+---
+
+<section class="relative">
+  <h3 class="text-center font-serif text-3xl font-semibold">
+    {title}
+  </h3>
+  <img src={picture} alt={description} class="my-3" loading="lazy" />
+  <Datetime class="px-2" date={publishDate} />
+  <p class="mt-1 px-2 font-sans">{description}</p>
+  <a href={galleryLinks.slug(publishDate, slug)} class="absolute inset-0"></a>
+</section>

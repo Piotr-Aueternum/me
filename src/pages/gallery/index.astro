@@ -1,0 +1,79 @@
+---
+import CommonHead from "components/CommonHead.astro";
+import Breadcrumbs from "components/Breadcrumbs.astro";
+import Container from "components/Container.astro";
+import PicturePreview from "components/PicturePreview.astro";
+
+import {
+  galleryLinks,
+  SlugUtils,
+  getDatesCount,
+  availableGallery,
+} from "lib/utils";
+
+const years = getDatesCount(
+  availableGallery.map(
+    ({ data }) =>
+      [SlugUtils.yearSlug(data.publishDate), data.publishDate] as const,
+  ),
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <CommonHead title="Piotr Sochacz - Gallery" />
+  </head>
+  <body class="bg-secondary">
+    <Container>
+      <header>
+        <Breadcrumbs />
+      </header>
+      <main>
+        <article class="mx-auto py-4">
+          <header class="my-2">
+            <h1 class="pt-6 pb-2 font-serif text-5xl font-bold text-pretty">
+              Gallery
+            </h1>
+          </header>
+        </article>
+        <section>
+          <nav>
+            <ul>
+              {
+                years.map(([date, count]) => (
+                  <li>
+                    <a href={galleryLinks.year(date)}>
+                      {SlugUtils.yearSlug(date)} ({count})
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </section>
+        <section>
+          <div class="py-24 sm:py-40">
+            <div class="mx-auto flex flex-col gap-y-24 md:w-3xl lg:w-4xl">
+              <div
+                class="mx-auto flex max-w-2xl grid-cols-2 flex-col gap-2 gap-y-12 lg:mx-0 lg:max-w-none"
+              >
+                {
+                  availableGallery.map(({ data, id }) => (
+                    <PicturePreview
+                      picture={data.picture}
+                      publishDate={data.publishDate}
+                      description={data.description}
+                      title={data.title}
+                      slug={id}
+                    />
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </Container>
+  </body>
+</html>

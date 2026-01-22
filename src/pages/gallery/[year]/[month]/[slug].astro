@@ -1,0 +1,56 @@
+---
+import MarkdocStyled from "components/MarkdocStyled.astro";
+import Datetime from "components/Datetime.astro";
+import CommonHead from "components/CommonHead.astro";
+import Breadcrumbs from "components/Breadcrumbs.astro";
+import Container from "components/Container.astro";
+import { availableGallery, SlugUtils } from "lib/utils";
+
+export function getStaticPaths() {
+  return availableGallery.map((picture) => ({
+    params: {
+      year: SlugUtils.yearSlug(picture.data.publishDate),
+      month: SlugUtils.monthSlug(picture.data.publishDate),
+      slug: picture.id,
+    },
+    props: picture,
+  }));
+}
+
+const { data } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <CommonHead title={`Piotr Sochacz - ${data.title}`} />
+  </head>
+
+  <body class="bg-secondary">
+    <Container>
+      <header>
+        <Breadcrumbs />
+      </header>
+      <main>
+        <article class="mx-auto py-4">
+          <header class="my-2">
+            <h1 class="pt-6 pb-2 font-serif text-5xl font-bold text-pretty">
+              {data.title}
+            </h1>
+            <div class="my-3 flex">
+              <Datetime date={data.publishDate} class="grow text-right">
+                <Fragment slot="before">Published:</Fragment>
+              </Datetime>
+            </div>
+            <img src={data.picture} loading="lazy" alt="" class="" />
+          </header>
+          <section>
+            <MarkdocStyled>
+              {data.description}
+            </MarkdocStyled>
+          </section>
+        </article>
+      </main>
+    </Container>
+  </body>
+</html>

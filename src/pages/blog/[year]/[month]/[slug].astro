@@ -1,0 +1,66 @@
+---
+import { render } from "astro:content";
+import TableOfContents from "components/TableOfContents.astro";
+import MarkdocStyled from "components/MarkdocStyled.astro";
+import Datetime from "components/Datetime.astro";
+import CommonHead from "components/CommonHead.astro";
+import { availableBlog, SlugUtils } from "lib/utils";
+
+export function getStaticPaths() {
+  return availableBlog.map((post) => ({
+    params: {
+      year: SlugUtils.yearSlug(post.data.publishDate),
+      month: SlugUtils.monthSlug(post.data.publishDate),
+      slug: post.id,
+    },
+    props: post,
+  }));
+}
+
+const { data } = Astro.props;
+
+const { Content } = await render(Astro.props);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <CommonHead title={data.title} />
+  </head>
+
+  <body>
+    <div class="mx-auto px-4 py-8 sm:w-lg lg:w-2xl">
+      <header>
+        <a href="/" class="text-xl underline">Home</a>
+      </header>
+      <main>
+        <article class="mx-auto py-4">
+          <header class="my-2">
+            <h1 class="pt-6 pb-2 font-serif text-5xl font-bold text-pretty">
+              {data.title}
+            </h1>
+            <div class="my-3 flex">
+              {
+                data.updatedDate && (
+                  <Datetime date={data.updatedDate}>
+                    <Fragment slot="before">Updated:</Fragment>
+                  </Datetime>
+                )
+              }
+              <Datetime date={data.publishDate} class="grow text-right">
+                <Fragment slot="before">Published:</Fragment>
+              </Datetime>
+            </div>
+            <img src={data.hero} loading="lazy" alt="" class="rounded-xl" />
+          </header>
+          <TableOfContents />
+          <section>
+            <MarkdocStyled>
+              <Content />
+            </MarkdocStyled>
+          </section>
+        </article>
+      </main>
+    </div>
+  </body>
+</html>

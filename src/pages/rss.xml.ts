@@ -1,12 +1,10 @@
 import rss from "@astrojs/rss";
 import type { APIRoute } from "astro";
-import { getCollection, getEntry } from "astro:content";
+import { getEntry } from "astro:content";
+import { availableBlog, blogLinks } from "lib/utils";
 
 export const GET: APIRoute = async (context) => {
-  const posts = (await getCollection("blog"))
-    .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
-    .filter(({ data }) => data.publishDate.valueOf() <= new Date().valueOf())
-    .slice(0, 2);
+  const posts = availableBlog.slice(0, 2);
 
   return rss({
     // `<title>` field in output xml
@@ -21,12 +19,7 @@ export const GET: APIRoute = async (context) => {
     // See "Generating items" section for examples using content collections and glob imports
     items: await Promise.all(
       posts.map(async (post) => ({
-        link: `${post.data.publishDate.getFullYear().toString()}/${post.data.publishDate.toLocaleDateString(
-          "en-GB",
-          {
-            month: "2-digit",
-          },
-        )}/${post.id}`,
+        link: blogLinks.slug(post.data.publishDate, post.id),
         title: post.data.title,
         description: post.data.description,
         pubDate: post.data.publishDate,
