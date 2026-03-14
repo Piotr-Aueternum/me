@@ -25,11 +25,11 @@ const blog = defineCollection({
 
 const gallery = defineCollection({
   loader: glob({ pattern: "**/*.yaml", base: "src/content/gallery" }),
-  schema: () =>
+  schema: ({ image }) =>
     z.object({
       title: z.string(),
       description: z.string(),
-      picture: z.string(),
+      picture: image(),
       publishDate: z.coerce.date(),
     }),
 });

@@ -92,8 +92,8 @@ export default config({
         }),
         picture: fields.image({
           label: "Hero image",
-          directory: "public/images/gallery",
-          publicPath: "/images/gallery",
+          directory: "src/images/gallery",
+          publicPath: "/src/images/gallery",
           validation: { isRequired: true },
         }),
         publishDate: fields.date({

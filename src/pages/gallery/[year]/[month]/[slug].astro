@@ -5,6 +5,7 @@ import CommonHead from "components/CommonHead.astro";
 import Breadcrumbs from "components/Breadcrumbs.astro";
 import Container from "components/Container.astro";
 import { availableGallery, SlugUtils } from "lib/utils";
+import { Picture } from "astro:assets";
 
 export function getStaticPaths() {
   return availableGallery.map((picture) => ({
@@ -42,7 +43,20 @@ const { data } = Astro.props;
                 <Fragment slot="before">Published:</Fragment>
               </Datetime>
             </div>
-            <img src={data.picture} loading="lazy" alt="" class="" />
+            <div class="relative">
+              <a
+                href={data.picture.src}
+                class="absolute inset-0"
+                target="_blank"></a>
+              <Picture
+                src={data.picture}
+                alt={data.description}
+                formats={["avif", "webp", "png", "jpeg", "jpg"]}
+                class="my-3"
+                loading="lazy"
+                widths={[360, 410, 768, 1280, 2560]}
+              />
+            </div>
           </header>
           <section>
             <MarkdocStyled>

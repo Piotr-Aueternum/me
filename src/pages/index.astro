@@ -9,6 +9,7 @@ import {
   availableGallery,
   availableBlog,
 } from "lib/utils";
+import { Picture } from "astro:assets";
 
 const posts = availableBlog.slice(0, 2);
 
@@ -91,11 +92,13 @@ const pictures = availableGallery.slice(0, 3);
                     <h3 class="text-center font-serif text-3xl font-semibold">
                       {data.title}
                     </h3>
-                    <img
+                    <Picture
                       src={data.picture}
                       alt={data.description}
+                      formats={["avif", "webp", "png", "jpeg", "jpg"]}
                       class="my-3"
                       loading="lazy"
+                      widths={[360, 410, 768]}
                     />
                     <Datetime class="px-2" date={data.publishDate} />
                     <p class="mt-1 px-2 font-sans">{data.description}</p>
