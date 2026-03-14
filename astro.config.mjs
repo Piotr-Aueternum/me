@@ -10,7 +10,7 @@ export default defineConfig({
   redirects: {
     "/[year]/[month]/[slug]": "/blog/[year]/[month]/[slug]",
   },
-  site: "https://piotr-sochacz.design",
+  site: "https://localhost:4321/",
   vite: {
     plugins: [tailwindcss()],
   },

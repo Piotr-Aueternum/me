@@ -24,10 +24,7 @@ const { data } = Astro.props;
 <!doctype html>
 <html lang="en">
   <head>
-    <CommonHead
-      title={`Piotr Sochacz - ${data.title}`}
-      image={data.picture.src}
-    />
+    <CommonHead title={`Piotr Sochacz - ${data.title}`} image={data.picture} />
   </head>
 
   <body class="bg-secondary">

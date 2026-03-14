@@ -4,13 +4,14 @@ import "styles/global.css";
 
 interface Props {
   title: string;
-  image?: string;
+  image?: ImageMetadata;
 }
 
 const { title, image } = Astro.props;
 
 const ogImage = image
-  ? (
+  ? Astro.site.origin +
+    (
       await getImage({
         src: image,
         width: 1200,
@@ -59,7 +60,7 @@ const ogImage = image
 <title>{title}</title>
 
 <!-- Facebook Meta Tags -->
-<meta property="og:url" content="" />
+<meta property="og:url" content={Astro.site} />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Piotr Sochacz - Ballerina" />
 <meta
