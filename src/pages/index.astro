@@ -9,7 +9,8 @@ import {
   availableGallery,
   availableBlog,
 } from "lib/utils";
-import { Picture } from "astro:assets";
+import CommonFooter from "components/CommonFooter.astro";
+import PicturePreview from "components/PicturePreview.astro";
 
 const posts = availableBlog.slice(0, 2);
 
@@ -41,7 +42,7 @@ const pictures = availableGallery.slice(0, 3);
               Software Developer
             </span>
           </h1>
-          <SocialMedia />
+          <SocialMedia theme="dark" />
         </div>
         <Dust class="absolute inset-0 -z-1" />
       </section>
@@ -84,29 +85,17 @@ const pictures = availableGallery.slice(0, 3);
               </h2>
             </div>
             <div
-              class="mx-auto flex max-w-2xl grid-cols-2 flex-col gap-2 gap-y-12 md:mx-0 lg:max-w-none"
+              class="mx-auto flex grid-cols-2 flex-col place-content-center gap-2 gap-y-12 md:mx-0"
             >
               {
                 pictures.map(({ data, id }) => (
-                  <section class="relative">
-                    <h3 class="text-center font-serif text-3xl font-semibold">
-                      {data.title}
-                    </h3>
-                    <Picture
-                      src={data.picture}
-                      alt={data.description}
-                      formats={["avif", "webp", "png", "jpeg", "jpg"]}
-                      class="my-3"
-                      loading="lazy"
-                      widths={[360, 410, 768]}
-                    />
-                    <Datetime class="px-2" date={data.publishDate} />
-                    <p class="mt-1 px-2 font-sans">{data.description}</p>
-                    <a
-                      href={galleryLinks.slug(data.publishDate, id)}
-                      class="absolute inset-0"
-                    />
-                  </section>
+                  <PicturePreview
+                    picture={data.picture}
+                    publishDate={data.publishDate}
+                    description={data.description}
+                    title={data.title}
+                    slug={id}
+                  />
                 ))
               }
               <a href={galleryLinks.root} class="text-center text-xl underline"
@@ -117,5 +106,6 @@ const pictures = availableGallery.slice(0, 3);
         </div>
       </section>
     </main>
+    <CommonFooter />
   </body>
 </html>

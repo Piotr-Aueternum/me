@@ -16,9 +16,9 @@ const { slug, description, picture, publishDate, title } = Astro.props;
     src={picture}
     alt={description}
     formats={["avif", "webp", "png", "jpeg", "jpg"]}
-    class="my-3"
+    class="my-3 w-full"
     loading="lazy"
-    widths={[360, 410, 768]}
+    widths={[360, 410, 768, 864]}
   />
   <Datetime class="px-2" date={publishDate} />
   <p class="mt-1 px-2 font-sans">{description}</p>

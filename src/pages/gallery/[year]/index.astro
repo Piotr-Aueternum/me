@@ -11,6 +11,8 @@ import {
   getDatesCount,
   SlugUtils,
 } from "lib/utils";
+import CommonFooter from "components/CommonFooter.astro";
+import PicturesContainer from "components/PicturesContainer.astro";
 
 export function getStaticPaths() {
   return availableGallery.map((picture) => ({
@@ -72,27 +74,22 @@ const months = getDatesCount(
           </nav>
         </section>
         <section>
-          <div class="py-24 sm:py-40">
-            <div class="mx-auto flex flex-col gap-y-24 md:w-3xl lg:w-4xl">
-              <div
-                class="mx-auto flex max-w-2xl grid-cols-2 flex-col gap-2 gap-y-12 lg:mx-0 lg:max-w-none"
-              >
-                {
-                  gallery.map(({ data, id }) => (
-                    <PicturePreview
-                      picture={data.picture}
-                      publishDate={data.publishDate}
-                      description={data.description}
-                      title={data.title}
-                      slug={id}
-                    />
-                  ))
-                }
-              </div>
-            </div>
-          </div>
+          <PicturesContainer>
+            {
+              gallery.map(({ data, id }) => (
+                <PicturePreview
+                  picture={data.picture}
+                  publishDate={data.publishDate}
+                  description={data.description}
+                  title={data.title}
+                  slug={id}
+                />
+              ))
+            }
+          </PicturesContainer>
         </section>
       </main>
     </Container>
+    <CommonFooter />
   </body>
 </html>

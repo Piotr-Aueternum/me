@@ -5,6 +5,7 @@ import MarkdocStyled from "components/MarkdocStyled.astro";
 import Datetime from "components/Datetime.astro";
 import CommonHead from "components/CommonHead.astro";
 import { availableBlog, SlugUtils } from "lib/utils";
+import CommonFooter from "components/CommonFooter.astro";
 
 export function getStaticPaths() {
   return availableBlog.map((post) => ({
@@ -61,6 +62,7 @@ const { Content } = await render(Astro.props);
           </section>
         </article>
       </main>
+      <CommonFooter />
     </div>
   </body>
 </html>

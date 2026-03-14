@@ -6,6 +6,7 @@ import Breadcrumbs from "components/Breadcrumbs.astro";
 import Container from "components/Container.astro";
 import { availableGallery, SlugUtils } from "lib/utils";
 import { Picture } from "astro:assets";
+import CommonFooter from "components/CommonFooter.astro";
 
 export function getStaticPaths() {
   return availableGallery.map((picture) => ({
@@ -66,5 +67,6 @@ const { data } = Astro.props;
         </article>
       </main>
     </Container>
+    <CommonFooter />
   </body>
 </html>

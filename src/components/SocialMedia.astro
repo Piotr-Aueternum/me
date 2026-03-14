@@ -1,23 +1,40 @@
 ---
+import clsx from "clsx";
+
+type Props = {
+  theme?: "auto" | "dark" | "light";
+};
+
+const { theme = "auto" } = Astro.props;
+
 const services = [
   {
     href: "https://www.linkedin.com/in/piotr-sochacz/",
     icon: {
-      src: "./servicesIcons/In-White-96.png",
+      src: {
+        light: "/public/logos/InBug-Black.png",
+        dark: "/public/logos/InBug-White.png",
+      },
       alt: "LinkedIn service logo",
     },
   },
   {
     href: "https://github.com/Piotr-Aueternum",
     icon: {
-      src: "./servicesIcons/github-mark-white.png",
+      src: {
+        light: "/public/logos/Github_Invertocat_Black.svg",
+        dark: "/public/logos/Github_Invertocat_White.svg",
+      },
       alt: "GitHub service logo",
     },
   },
   {
     href: "https://www.instagram.com/piotr.sochacz/",
     icon: {
-      src: "./servicesIcons/Instagram_Glyph_White.png",
+      src: {
+        light: "/public/logos/Instagram_Glyph_Black.svg",
+        dark: "/public/logos/Instagram_Glyph_White.svg",
+      },
       alt: "Instagram service logo",
     },
   },
@@ -34,12 +51,26 @@ const services = [
           rel="noreferrer"
           href={service.href}
         >
-          <img
-            src={service.icon.src}
-            alt={service.icon.alt}
-            width={36}
-            height={36}
-          />
+          <picture>
+            <source
+              srcset={
+                theme === "auto"
+                  ? service.icon.src.light
+                  : service.icon.src[theme]
+              }
+              media="(prefers-color-scheme: light)"
+            />
+            <img
+              src={
+                theme === "auto"
+                  ? service.icon.src.dark
+                  : service.icon.src[theme]
+              }
+              alt={service.icon.alt}
+              width={36}
+              height={36}
+            />
+          </picture>
         </a>
       </li>
     ))
@@ -53,7 +84,14 @@ const services = [
       title="Curriculum vitae"
     >
       <div
-        class="flex h-10 w-10 items-center justify-center rounded-md border-2 border-slate-50 font-bold text-slate-50 uppercase"
+        style="corner-shape: squircle"
+        class={clsx(
+          "flex h-9 w-9 items-center justify-center rounded-md border-3  text-[1rem]/9 font-bold uppercase",
+          theme === "auto" &&
+            "border-black text-black  dark:border-slate-50 dark:text-slate-50",
+          theme === "dark" && "border-slate-50 text-slate-50",
+          theme === "light" && "border-black text-black",
+        )}
       >
         cv
       </div>
