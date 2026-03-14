@@ -10,7 +10,7 @@ interface Props {
 const { title, image } = Astro.props;
 
 const ogImage = image
-  ? Astro.site.origin +
+  ? Astro.site?.origin +
     (
       await getImage({
         src: image,
